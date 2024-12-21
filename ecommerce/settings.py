@@ -84,12 +84,9 @@ print("Database URL:", os.getenv('DATABASE_URL'))
 
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
-        engine='django.db.backends.postgresql',
-    )
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL')), 
+    'engine':'django.db.backends.postgresql',
 }
-
 
 
 # Password validation
