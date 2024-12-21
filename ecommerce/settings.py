@@ -84,16 +84,8 @@ print("Database URL:", os.getenv('DATABASE_URL'))
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'onIGZHLRnhkYKPCukrMFcvaIyWglaRdP',
-        'HOST': 'postgres.railway.internal',  # O el host donde se ejecuta PostgreSQL
-        'PORT': '5432',       # Puerto predeterminado para PostgreSQL
-    }
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
-
 
 
 # Password validation
