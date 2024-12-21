@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'home',
     'usuarios',
 ]
@@ -84,8 +85,7 @@ print("Database URL:", os.getenv('DATABASE_URL'))
 
 
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL')), 
-    'engine':'django.db.backends.postgresql',
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 
@@ -131,6 +131,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-ALLOWED_HOSTS = ['localhost','web-production-4880.up.railway.app']
+ALLOWED_HOSTS = ['*','localhost','web-production-4880.up.railway.app']
 
 CSRF_TRUSTED_ORIGINS = ['https://*','https://web-production-4880.up.railway.app']
