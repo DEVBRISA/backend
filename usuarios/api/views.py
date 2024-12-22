@@ -9,14 +9,6 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 
-
-
-class UsuarioViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    queryset = Usuario.objects.all()
-    serializer_class = UsuarioSerializer
-
-
 class RegisterView(generics.CreateAPIView):
     queryset = Usuario.objects.all()
     serializer_class = RegisterSerializer
@@ -41,4 +33,30 @@ class LoginView(generics.CreateAPIView):
             })
         else:
             return Response({'error': 'Credenciales inválidas'}, status=401)
+        
+
+class UsuarioListView(generics.ListAPIView):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer 
+    permission_classes = [IsAuthenticated] 
+
+
+class UsuarioDetailView(generics.RetrieveAPIView):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+    permission_classes = [IsAuthenticated]  
+    lookup_field = 'dni'  
+
+
+class UsuarioUpdateView(generics.UpdateAPIView):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+    permission_classes = [IsAuthenticated] 
+    lookup_field = 'dni'
+
+class UsuarioDeleteView(generics.DestroyAPIView):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+    permission_classes = [IsAuthenticated]  
+    lookup_field = 'dni'
     

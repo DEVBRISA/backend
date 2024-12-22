@@ -24,7 +24,7 @@ from rest_framework_simplejwt.views import (
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
-from usuarios.api.views import LoginView, RegisterView
+from usuarios.api.views import LoginView, RegisterView, UsuarioDeleteView, UsuarioDetailView, UsuarioListView, UsuarioUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,6 +33,10 @@ urlpatterns = [
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-    path('api/auth/register', RegisterView.as_view(), name='register'),
-    path('api/auth/login', LoginView.as_view(), name='login'),
+    path('auth/register', RegisterView.as_view(), name='register'),
+    path('auth/login', LoginView.as_view(), name='login'),
+    path('usuarios/', UsuarioListView.as_view(), name='usuario-list'),  # Listar usuarios
+    path('usuarios/<str:dni>/', UsuarioDetailView.as_view(), name='usuario-detail'),  # Detalle de un usuario
+    path('usuarios/<str:dni>/edit/', UsuarioUpdateView.as_view(), name='usuario-update'),  # Editar usuario
+    path('usuarios/<str:dni>/delete/', UsuarioDeleteView.as_view(), name='usuario-delete'),  # Eliminar usuario
 ]
