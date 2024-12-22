@@ -85,13 +85,13 @@ print("Database URL:", os.getenv('DATABASE_URL'))
 
 
 DATABASES = {
-    'default': {
+   'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('POSTGRES_HOST'),
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'onIGZHLRnhkYKPCukrMFcvaIyWglaRdP',
+        'HOST': 'postgres.railway.internal',  # O el host donde se ejecuta PostgreSQL
+        'PORT': '5432',       # Puerto predeterminado para PostgreSQL
     }
 }
 
