@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'home',
     'usuarios',
+    'infoHilattis',
     ]
 
 MIDDLEWARE = [
@@ -86,16 +87,8 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 import os
 print("Database URL:", os.getenv('DATABASE_URL'))
 
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('POSTGRES_HOST'),
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
-    }
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 
