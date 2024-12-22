@@ -2,25 +2,25 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 
 class UsuarioManager(BaseUserManager):
-    def create_user(self, dni, nombre, apellidos, email, password=None, **extra_fields):
-        """
-        Crear un usuario regular con DNI como clave primaria y contraseña encriptada.
-        """
+    def create_user(self, dni, username, nombre=None, apellidos=None, email=None, password=None, **extra_fields):
         if not dni:
             raise ValueError("El DNI es obligatorio")
-        if not email:
-            raise ValueError("El email es obligatorio")
-        
-        email = self.normalize_email(email)
-        user = self.model(dni=dni, nombre=nombre, apellidos=apellidos, email=email, **extra_fields)
-        user.set_password(password)  # Encripta la contraseña
+        if not username:
+            raise ValueError("El username es obligatorio")
+
+        user = self.model(
+            dni=dni,
+            username=username,  # Ahora username es obligatorio
+            nombre=nombre,
+            apellidos=apellidos,
+            email=email,
+            **extra_fields
+        )
+        user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, dni, nombre, apellidos, email, password=None, **extra_fields):
-        """
-        Crear un superusuario con permisos de administrador.
-        """
+    def create_superuser(self, dni, username, nombre, apellidos, email=None, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
@@ -29,17 +29,15 @@ class UsuarioManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser debe tener is_superuser=True.')
 
-        return self.create_user(dni, nombre, apellidos, email, password, **extra_fields)
+        return self.create_user(dni, username, nombre, apellidos, email, password, **extra_fields)
 
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
-    """
-    Modelo personalizado de usuario donde el DNI es la clave primaria.
-    """
-    dni = models.CharField(max_length=8, unique=True, primary_key=True)  # DNI como clave primaria
+    dni = models.CharField(max_length=8, unique=True, primary_key=True)  # Clave primaria como DNI
+    username = models.CharField(max_length=150, unique=True)
     nombre = models.CharField(max_length=100)
     apellidos = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     phone = models.CharField(max_length=15, null=True, blank=True)
@@ -48,15 +46,15 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_modificacion = models.DateTimeField(auto_now=True)
 
-    # Añadir related_name para evitar conflictos con el modelo User predeterminado
     groups = models.ManyToManyField('auth.Group', related_name='usuario_set', blank=True)
     user_permissions = models.ManyToManyField('auth.Permission', related_name='usuario_set', blank=True)
 
     objects = UsuarioManager()
-
-    # Campo para iniciar sesión
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['dni', 'nombre', 'apellidos']
+    USERNAME_FIELD = 'username'  # Usar 'username' para el login
+    REQUIRED_FIELDS = ['dni', 'nombre', 'apellidos']  # Incluir 'dni' en los campos requeridos
 
     def __str__(self):
         return f'{self.nombre} {self.apellidos}'
+
+
+
