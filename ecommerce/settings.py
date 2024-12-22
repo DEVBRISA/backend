@@ -41,10 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework_simplejwt',
     'rest_framework',
+    'drf_spectacular',
     'home',
     'usuarios',
-]
+    ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -85,14 +87,7 @@ print("Database URL:", os.getenv('DATABASE_URL'))
 
 
 DATABASES = {
-   'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'railway',
-        'USER': 'postgres',
-        'PASSWORD': 'onIGZHLRnhkYKPCukrMFcvaIyWglaRdP',
-        'HOST': 'postgres.railway.internal',  # O el host donde se ejecuta PostgreSQL
-        'PORT': '5432',       # Puerto predeterminado para PostgreSQL
-    }
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 
@@ -141,3 +136,29 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ALLOWED_HOSTS = ['*','web-production-4880.up.railway.app']
 
 CSRF_TRUSTED_ORIGINS = ['https://*','https://web-production-4880.up.railway.app']
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',  
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Hilattis API',
+    'DESCRIPTION': 'APIs para Hilattis',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SECURITY': [
+        {
+            'jwtAuth': {
+                'type': 'http',
+                'scheme': 'bearer',
+                'bearerFormat': 'JWT',
+            },
+        },
+    ],
+}
