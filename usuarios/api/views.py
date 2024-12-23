@@ -12,7 +12,7 @@ from rest_framework.response import Response
 class RegisterView(generics.CreateAPIView):
     queryset = Usuario.objects.all()
     serializer_class = RegisterSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class LoginView(generics.CreateAPIView):
