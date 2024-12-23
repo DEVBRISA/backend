@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -25,6 +27,7 @@ from rest_framework_simplejwt.views import (
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 
+from categoria.views import CategoriaCreateView, CategoriaDeleteView, CategoriaListView
 from infoHilattis.views import  infoHilattisCreateView, infoHilattisListView, infoHilattisUpdateView
 from usuarios.api.views import LoginView, RegisterView, UsuarioDeleteView, UsuarioDetailView, UsuarioListView, UsuarioUpdateView
 
@@ -43,5 +46,9 @@ urlpatterns = [
     path('usuarios/<str:dni>/delete/', UsuarioDeleteView.as_view(), name='usuario-delete'), 
     path('empresas/', infoHilattisListView.as_view(), name='empresa-list'), 
     path('empresas/create/', infoHilattisCreateView.as_view(), name='empresa-create'),     
-    path('empresas/<int:id>/', infoHilattisUpdateView.as_view(), name='empresa-edit')
+    path('empresas/<int:id>/', infoHilattisUpdateView.as_view(), name='empresa-edit'),
+    path('categorias/', CategoriaCreateView.as_view(), name='categoria-create'),
+    path('categorias/', CategoriaListView.as_view(), name='categoria-list'),
+    path('categorias/<int:id>/', CategoriaCreateView.as_view(), name='categoria-edit'),
+    path('categorias/<int:id>/delete/', CategoriaDeleteView.as_view(), name='categoria-delete'),
 ]

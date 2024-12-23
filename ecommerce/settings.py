@@ -15,6 +15,7 @@ from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -46,10 +47,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'corsheaders',
+    'cloudinary',
+    'cloudinary_storage',
     'home',
     'usuarios',
     'infoHilattis',
-    #'categoria',
+    'categoria',
     ]
 
 MIDDLEWARE = [
@@ -88,11 +91,12 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 import os
-print("Database URL:", os.getenv('DATABASE_URL'))
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 DATABASES = {
-   'default': {
+    'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('POSTGRES_DB'),
         'USER': os.getenv('POSTGRES_USER'),
@@ -187,3 +191,11 @@ SPECTACULAR_SETTINGS = {
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
 CORS_ALLOW_ALL_ORIGINS = True
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'cloud_name': 'dsxwajkdi',
+    'api_key': '496853443348728',
+    'api_secret': 'YazHD1EAkLpdwrcRksDBYHDbJCk',
+}
+
