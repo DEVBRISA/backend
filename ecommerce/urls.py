@@ -24,7 +24,7 @@ from rest_framework_simplejwt.views import (
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
-from categoria.views import CategoriaView
+
 from infoHilattis.views import  infoHilattisCreateView, infoHilattisListView, infoHilattisUpdateView
 from usuarios.api.views import LoginView, RegisterView, UsuarioDeleteView, UsuarioDetailView, UsuarioListView, UsuarioUpdateView
 
@@ -43,6 +43,5 @@ urlpatterns = [
     path('usuarios/<str:dni>/delete/', UsuarioDeleteView.as_view(), name='usuario-delete'), 
     path('empresas/', infoHilattisListView.as_view(), name='empresa-list'), 
     path('empresas/create/', infoHilattisCreateView.as_view(), name='empresa-create'),     
-    path('empresas/<int:id>/', infoHilattisUpdateView.as_view(), name='empresa-edit'),
-    path('categoria/', CategoriaView.as_view(), name='categoria-list'),
+    path('empresas/<int:id>/', infoHilattisUpdateView.as_view(), name='empresa-edit')
 ]
