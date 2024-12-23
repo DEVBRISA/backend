@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     'home',
     'usuarios',
     'infoHilattis',
-    'categoria',
+    #'categoria',
     ]
 
 MIDDLEWARE = [
