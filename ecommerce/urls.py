@@ -51,4 +51,5 @@ urlpatterns = [
     path('categorias/', CategoriaListView.as_view(), name='categoria-list'),
     path('categorias/<int:id>/', CategoriaCreateView.as_view(), name='categoria-edit'),
     path('categorias/<int:id>/delete/', CategoriaDeleteView.as_view(), name='categoria-delete'),
+    path('media/categorias/<str:filename>', CategoriaCreateView.as_view(), name='categoria-imagen'),
 ]
