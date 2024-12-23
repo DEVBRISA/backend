@@ -52,5 +52,4 @@ urlpatterns = [
     path('categorias/<int:id>/', CategoriaIdView.as_view(), name='categoria-id'),
     path('categorias/edit/<int:id>/', CategoriaEditView.as_view(), name='categoria-edit'),
     path('categorias/<int:id>/delete/', CategoriaDeleteView.as_view(), name='categoria-delete'),
-    path('media/categorias/<str:filename>', CategoriaCreateView.as_view(), name='categoria-imagen'),
-]
+    ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

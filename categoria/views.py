@@ -3,11 +3,13 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from categoria.models import Categoria
 from categoria.serializer import CategoriaSerializer
+from rest_framework.permissions import AllowAny
+
 
 class CategoriaListView(generics.ListAPIView):
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request):
         """Lista todas las categorías"""
@@ -18,12 +20,13 @@ class CategoriaListView(generics.ListAPIView):
 class CategoriaIdView(generics.RetrieveAPIView):
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    lookup_field = 'id'
 
-    def get(self, request, pk=None):
+    def get(self, request, id=None):
         """Obtiene una categoría por ID"""
         try:
-            categoria = self.get_queryset().get(pk=pk)
+            categoria = self.get_queryset().get(id=id)
             serializer = self.get_serializer(categoria)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Categoria.DoesNotExist:
@@ -46,12 +49,20 @@ class CategoriaEditView(generics.UpdateAPIView):
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
     permission_classes = [IsAuthenticated]
+    lookup_field = 'id'
 
-    def put(self, request, pk=None):
-        """Actualiza una categoría existente"""
+    def put(self, request, *args, **kwargs):
+        id = kwargs.get('id')
+        if not id:
+            return Response({"error": "ID no proporcionado"}, status=400)
+        
         try:
-            categoria = self.get_queryset().get(pk=pk)
-            serializer = self.get_serializer(categoria, data=request.data, partial=True)
+            categoria = Categoria.objects.get(id=id)
+            data = request.data
+            
+            if 'imagen' not in data:
+                data['imagen'] = categoria.imagen  
+            serializer = self.get_serializer(categoria, data=data, partial=True)  
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
@@ -63,11 +74,12 @@ class CategoriaDeleteView(generics.DestroyAPIView):
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
     permission_classes = [IsAuthenticated]
+    lookup_field = 'id'
 
-    def delete(self, request, pk=None):
+    def delete(self, request, id=None):
         """Elimina una categoría por ID"""
         try:
-            categoria = self.get_queryset().get(pk=pk)
+            categoria = self.get_queryset().get(id=id)
             categoria.delete()
             return Response({"message": "Categoría eliminada exitosamente"}, status=status.HTTP_204_NO_CONTENT)
         except Categoria.DoesNotExist:

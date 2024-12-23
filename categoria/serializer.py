@@ -2,13 +2,13 @@ from rest_framework import serializers
 from .models import Categoria
 
 class CategoriaSerializer(serializers.ModelSerializer):
-    imagen_url = serializers.SerializerMethodField()
-
     class Meta:
         model = Categoria
-        fields = ['id', 'nombre', 'descripcion', 'fecha_creacion', 'fecha_modificacion', 'imagen', 'imagen_url']
+        fields = '__all__' 
 
-    def get_imagen_url(self, obj):
-        if obj.imagen:
-            return obj.imagen.url
-        return None
+    def update(self, instance, validated_data):
+        imagen = validated_data.get('imagen', instance.imagen)
+        instance.imagen = imagen 
+
+        return super().update(instance, validated_data)
+
