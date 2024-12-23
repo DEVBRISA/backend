@@ -24,6 +24,7 @@ from rest_framework_simplejwt.views import (
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
+from categoria.views import CategoriaView
 from infoHilattis.views import  infoHilattisCreateView, infoHilattisListView, infoHilattisUpdateView
 from usuarios.api.views import LoginView, RegisterView, UsuarioDeleteView, UsuarioDetailView, UsuarioListView, UsuarioUpdateView
 
@@ -36,11 +37,12 @@ urlpatterns = [
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('auth/register', RegisterView.as_view(), name='register'),
     path('auth/login', LoginView.as_view(), name='login'),
-    path('usuarios/', UsuarioListView.as_view(), name='usuario-list'),  # Listar usuarios
-    path('usuarios/<str:dni>/', UsuarioDetailView.as_view(), name='usuario-detail'),  # Detalle de un usuario
-    path('usuarios/<str:dni>/edit/', UsuarioUpdateView.as_view(), name='usuario-update'),  # Editar usuario
-    path('usuarios/<str:dni>/delete/', UsuarioDeleteView.as_view(), name='usuario-delete'),  # Eliminar usuario
-    path('empresas/', infoHilattisListView.as_view(), name='empresa-list'),  # Listar empresas
-    path('empresas/create/', infoHilattisCreateView.as_view(), name='empresa-create'),  # Crear empresa
-    path('empresas/<int:id>/', infoHilattisUpdateView.as_view(), name='empresa-edit'),  # Detalle de una empresa
+    path('usuarios/', UsuarioListView.as_view(), name='usuario-list'), 
+    path('usuarios/<str:dni>/', UsuarioDetailView.as_view(), name='usuario-detail'),  
+    path('usuarios/<str:dni>/edit/', UsuarioUpdateView.as_view(), name='usuario-update'),  
+    path('usuarios/<str:dni>/delete/', UsuarioDeleteView.as_view(), name='usuario-delete'), 
+    path('empresas/', infoHilattisListView.as_view(), name='empresa-list'), 
+    path('empresas/create/', infoHilattisCreateView.as_view(), name='empresa-create'),     
+    path('empresas/<int:id>/', infoHilattisUpdateView.as_view(), name='empresa-edit'),
+    path('categoria/', CategoriaView.as_view(), name='categoria-list'),
 ]

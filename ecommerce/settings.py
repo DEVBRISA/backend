@@ -45,14 +45,17 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework',
     'drf_spectacular',
+    'corsheaders',
     'home',
     'usuarios',
     'infoHilattis',
+    'categoria',
     ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -89,14 +92,7 @@ print("Database URL:", os.getenv('DATABASE_URL'))
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('POSTGRES_HOST'),
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
-    }
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 
@@ -183,3 +179,4 @@ SPECTACULAR_SETTINGS = {
 
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
+CORS_ALLOW_ALL_ORIGINS = True
