@@ -6,12 +6,13 @@ from projects.models import Proyecto
 from projects.serializer import ProyectoSerializer
 from projects.serializer import ProyectoDeleteSerializer
 from projects.serializer import ProyectoDeleteImageSerializer
+from rest_framework.permissions import AllowAny as AllwoAny
 
 
 class CreateProjectView(generics.CreateAPIView):
     queryset = Proyecto.objects.all()
     serializer_class = ProyectoSerializer
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -77,11 +78,11 @@ class DeleteImageView(generics.UpdateAPIView):
 class ListProjectView(generics.ListAPIView):
     queryset = Proyecto.objects.all()
     serializer_class = ProyectoSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllwoAny]
 
 class ProjectIdView(generics.RetrieveAPIView):
     queryset = Proyecto.objects.all()
     serializer_class = ProyectoSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllwoAny]
     lookup_field = 'id'
 
