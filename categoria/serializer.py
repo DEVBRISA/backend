@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Categoria
 
 class CategoriaSerializer(serializers.ModelSerializer):
+    imagen = serializers.ImageField(required=False)  # Hacemos la imagen opcional
+
     class Meta:
         model = Categoria
         fields = '__all__' 
@@ -11,4 +13,3 @@ class CategoriaSerializer(serializers.ModelSerializer):
         instance.imagen = imagen 
 
         return super().update(instance, validated_data)
-

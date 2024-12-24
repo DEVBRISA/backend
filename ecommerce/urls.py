@@ -29,6 +29,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 from categoria.views import CategoriaCreateView, CategoriaDeleteView, CategoriaEditView, CategoriaIdView, CategoriaListView
 from infoHilattis.views import  infoHilattisCreateView, infoHilattisListView, infoHilattisUpdateView
+from projects.views import CreateProjectView, DeleteImageView, DeleteProjectView, EditProjectView, ListProjectView, ProjectIdView
 from usuarios.api.views import LoginView, RegisterView, UsuarioDeleteView, UsuarioDetailView, UsuarioListView, UsuarioUpdateView
 
 urlpatterns = [
@@ -52,4 +53,10 @@ urlpatterns = [
     path('categorias/<int:id>/', CategoriaIdView.as_view(), name='categoria-id'),
     path('categorias/edit/<int:id>/', CategoriaEditView.as_view(), name='categoria-edit'),
     path('categorias/<int:id>/delete/', CategoriaDeleteView.as_view(), name='categoria-delete'),
+    path('projects/', ListProjectView.as_view(), name='list_projects'),
+    path('projects/create/', CreateProjectView.as_view(), name='create_project'),
+    path('projects/<int:id>/', ProjectIdView.as_view(), name='get_project_by_id'),
+    path('projects/edit/<int:id>/', EditProjectView.as_view(), name='edit_project'),
+    path('projects/<int:id>/delete/', DeleteProjectView.as_view(), name='delete_project'),
+    path('projects/<int:id>/delete-images/', DeleteImageView.as_view(), name='delete_project_images'),
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
