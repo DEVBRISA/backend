@@ -14,6 +14,8 @@ from datetime import timedelta
 from pathlib import Path
 import dj_database_url
 from dotenv import load_dotenv
+import os
+from corsheaders.defaults import default_headers
 
 
 load_dotenv()
@@ -91,7 +93,6 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-import os
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -201,6 +202,9 @@ SPECTACULAR_SETTINGS = {
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'Authorization',
+]
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CLOUDINARY_STORAGE = {
