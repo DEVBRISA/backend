@@ -29,6 +29,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 from categoria.views import CategoriaCreateView, CategoriaDeleteView, CategoriaEditView, CategoriaIdView, CategoriaListView
 from infoHilattis.views import  infoHilattisCreateView, infoHilattisListView, infoHilattisUpdateView
+from productos.views import ProductoCreateView, ProductoDeleteView, ProductoDetailView, ProductoListView, ProductoUpdateView
 from projects.views import CreateProjectView, DeleteImageView, DeleteProjectView, EditProjectView, ListProjectView, ProjectIdView
 from usuarios.api.views import LoginView, RegisterView, UsuarioDeleteView, UsuarioDetailView, UsuarioListView, UsuarioUpdateView
 
@@ -42,7 +43,7 @@ urlpatterns = [
     path('auth/register', RegisterView.as_view(), name='register'),
     path('auth/login', LoginView.as_view(), name='login'),
     path('usuarios/', UsuarioListView.as_view(), name='usuario-list'), 
-    path('usuarios/<str:dni>', UsuarioDetailView.as_view(), name='usuario-detail'),  
+    path('usuarios/<str:dni>', UsuarioDetailView.as_view(), name='usuario-id'),  
     path('usuarios/edit/<str:dni>', UsuarioUpdateView.as_view(), name='usuario-update'),  
     path('usuarios/delete/<str:dni>', UsuarioDeleteView.as_view(), name='usuario-delete'), 
     path('empresas/', infoHilattisListView.as_view(), name='empresa-list'), 
@@ -54,9 +55,15 @@ urlpatterns = [
     path('categorias/edit/<int:id>', CategoriaEditView.as_view(), name='categoria-edit'),
     path('categorias/delete/<int:id>', CategoriaDeleteView.as_view(), name='categoria-delete'),
     path('projects/', ListProjectView.as_view(), name='list_projects'),
+    path('projects/<int:id>', ProjectIdView.as_view(), name='project-id'),
     path('projects/create', CreateProjectView.as_view(), name='create_project'),
-    path('projects/<int:id>', ProjectIdView.as_view(), name='get_project_by_id'),
     path('projects/edit/<int:id>', EditProjectView.as_view(), name='edit_project'),
     path('projects/delete/<int:id>', DeleteProjectView.as_view(), name='delete_project'),
     path('projects/delete-images/<int:id>', DeleteImageView.as_view(), name='delete_project_images'),
+    path('productos/', ProductoListView.as_view(), name='producto-list'),
+    path('productos/<int:id_producto>', ProductoDetailView.as_view(), name='producto-id'),
+    path('productos/create', ProductoCreateView.as_view(), name='producto-create'),
+    path('productos/edit/<int:id_producto>', ProductoUpdateView.as_view(), name='producto-edit'),
+    path('productos/delete/<int:id_producto>', ProductoDeleteView.as_view(), name='producto-delete'),
+    
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
