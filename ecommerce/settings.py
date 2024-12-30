@@ -94,8 +94,9 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#MEDIA_URL = '/media/'
+
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 DATABASES = {
@@ -113,8 +114,8 @@ DATABASES = {
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
-
 """
+
 
 
 
@@ -206,11 +207,15 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'Authorization',
 ]
+
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CLOUDINARY_STORAGE = {
-    'cloud_name': 'dsxwajkdi',
-    'api_key': '496853443348728',
-    'api_secret': 'YazHD1EAkLpdwrcRksDBYHDbJCk',
+    'cloud_name': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'api_key': os.getenv('CLOUDINARY_API_KEY'),
+    'api_secret': os.getenv('CLOUDINARY_API_SECRET'),
+    'folder': 'Hilattis',
 }
+
+
 
