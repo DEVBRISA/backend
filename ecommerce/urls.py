@@ -66,4 +66,4 @@ urlpatterns = [
     path('productos/edit/<int:id_producto>', ProductoUpdateView.as_view(), name='producto-edit'),
     path('productos/delete/<int:id_producto>', ProductoDeleteView.as_view(), name='producto-delete'),
     
-    ]
+    ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
