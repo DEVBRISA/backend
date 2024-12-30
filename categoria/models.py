@@ -7,7 +7,7 @@ class Categoria(models.Model):
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_modificacion = models.DateTimeField(auto_now=True)
     imagen = models.ImageField(upload_to='categorias/', null=True, blank=True)
+    visible = models.BooleanField(default=False)  # Campo añadido
 
     def __str__(self):
         return self.nombre
-
