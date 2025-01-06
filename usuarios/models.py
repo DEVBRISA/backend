@@ -33,7 +33,12 @@ class UsuarioManager(BaseUserManager):
 
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
-    dni = models.CharField(max_length=8, unique=True, primary_key=True)  # Clave primaria como DNI
+    ROLES = [
+        ('admin', 'Admin'),
+        ('default', 'Default'),
+    ]
+
+    dni = models.CharField(max_length=8, unique=True, primary_key=True)  
     username = models.CharField(max_length=150, unique=True)
     nombre = models.CharField(max_length=100)
     apellidos = models.CharField(max_length=100)
@@ -45,16 +50,18 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     profile_picture = models.URLField(null=True, blank=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_modificacion = models.DateTimeField(auto_now=True)
+    rol = models.CharField(max_length=10, choices=ROLES, default='default') 
 
     groups = models.ManyToManyField('auth.Group', related_name='usuario_set', blank=True)
     user_permissions = models.ManyToManyField('auth.Permission', related_name='usuario_set', blank=True)
 
     objects = UsuarioManager()
-    USERNAME_FIELD = 'username'  # Usar 'username' para el login
-    REQUIRED_FIELDS = ['dni', 'nombre', 'apellidos']  # Incluir 'dni' en los campos requeridos
+    USERNAME_FIELD = 'username' 
+    REQUIRED_FIELDS = ['dni', 'nombre', 'apellidos']  
 
     def __str__(self):
         return f'{self.nombre} {self.apellidos}'
+
 
 
 

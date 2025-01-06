@@ -51,12 +51,24 @@ class UsuarioDetailView(generics.RetrieveAPIView):
 class UsuarioUpdateView(generics.UpdateAPIView):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
-    permission_classes = [IsAuthenticated] 
+    permission_classes = [IsAuthenticated]
     lookup_field = 'dni'
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if not instance.is_active:
+            return Response({'error': 'No se puede editar un usuario inactivo.'}, status=403)
+        return super().update(request, *args, **kwargs)
+
 
 class UsuarioDeleteView(generics.DestroyAPIView):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
-    permission_classes = [IsAuthenticated]  
+    permission_classes = [IsAuthenticated]
     lookup_field = 'dni'
-    
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.is_active:
+            return Response({'error': 'No se puede eliminar un usuario activo.'}, status=403)
+        return super().destroy(request, *args, **kwargs)

@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'usuarios',
     'infoHilattis',
     'productos',
+    'variants',
     'categoria',
     'projects',
     ]

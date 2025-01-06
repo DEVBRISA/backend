@@ -35,7 +35,7 @@ class ProductoDetailView(generics.RetrieveAPIView):
 class ProductoCreateView(generics.CreateAPIView):
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def post(self, request):
         """Crea un nuevo producto"""
@@ -55,11 +55,27 @@ class ProductoUpdateView(generics.UpdateAPIView):
         """Actualiza un producto por ID"""
         try:
             producto = self.get_queryset().get(id_producto=id_producto)
-            serializer = self.get_serializer(producto, data=request.data, partial=True)
+            # No sobrescribir las imágenes si no están siendo modificadas
+            imagen_default = request.data.get('imagen_default', producto.imagen_default)
+
+            # Creación de un diccionario con los datos a actualizar
+            data = {
+                'nombre': request.data.get('nombre', producto.nombre),
+                'descripcion': request.data.get('descripcion', producto.descripcion),
+                'precio': request.data.get('precio', producto.precio),
+                'is_variable': request.data.get('is_variable', producto.is_variable),
+                'estatus': request.data.get('estatus', producto.estatus),
+                'id_categoria': request.data.get('id_categoria', producto.id_categoria),
+                'imagen_default': imagen_default,  # Mantener la imagen por defecto si no se cambia
+            }
+
+            # Crear el serializer con los datos a actualizar
+            serializer = self.get_serializer(producto, data=data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         except Producto.DoesNotExist:
             return Response({"error": "Producto no encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
