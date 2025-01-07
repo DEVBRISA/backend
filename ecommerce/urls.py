@@ -31,7 +31,7 @@ from categoria.views import CategoriaCreateView, CategoriaDeleteView, CategoriaE
 from infoHilattis.views import  infoHilattisCreateView, infoHilattisListView, infoHilattisUpdateView
 from productos.views import ProductoCreateView, ProductoDeleteView, ProductoDetailView, ProductoListView, ProductoUpdateView
 from projects.views import CreateProjectView, DeleteImageView, DeleteProjectView, EditProjectView, ListProjectView, ProjectIdView
-from usuarios.api.views import LoginView, RegisterView, UsuarioDeleteView, UsuarioDetailView, UsuarioListView, UsuarioUpdateView
+from usuarios.api.views import LoginView, RegisterView, UsuarioChangeStateView, UsuarioDeleteView, UsuarioDetailView, UsuarioListView, UsuarioUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -44,7 +44,8 @@ urlpatterns = [
     path('auth/login', LoginView.as_view(), name='login'),
     path('usuarios/', UsuarioListView.as_view(), name='usuario-list'), 
     path('usuarios/<str:dni>', UsuarioDetailView.as_view(), name='usuario-id'),  
-    path('usuarios/edit/<str:dni>', UsuarioUpdateView.as_view(), name='usuario-update'),  
+    path('usuarios/edit/<str:dni>', UsuarioUpdateView.as_view(), name='usuario-update'), 
+    path('usuarios/change-state/<str:dni>', UsuarioChangeStateView.as_view(), name='usuario-change-state'), 
     path('usuarios/delete/<str:dni>', UsuarioDeleteView.as_view(), name='usuario-delete'), 
     path('empresas/', infoHilattisListView.as_view(), name='empresa-list'), 
     path('empresas/create', infoHilattisCreateView.as_view(), name='empresa-create'),     

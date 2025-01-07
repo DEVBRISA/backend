@@ -23,3 +23,10 @@ class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(required=True) 
     password = serializers.CharField(required=True, write_only=True)
 
+    
+
+class UsuarioChangeStateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = ['is_active']   
+

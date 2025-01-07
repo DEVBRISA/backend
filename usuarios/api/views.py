@@ -2,9 +2,10 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from usuarios.models import Usuario
-from usuarios.api.serializer import LoginSerializer, RegisterSerializer, UsuarioSerializer
+from usuarios.api.serializer import LoginSerializer, RegisterSerializer, UsuarioSerializer, UsuarioChangeStateSerializer
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
@@ -60,6 +61,23 @@ class UsuarioUpdateView(generics.UpdateAPIView):
             return Response({'error': 'No se puede editar un usuario inactivo.'}, status=403)
         return super().update(request, *args, **kwargs)
 
+class UsuarioChangeStateView(generics.UpdateAPIView):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioChangeStateSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'dni'
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+
+        # Validación y guardado
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        estado = 'activado' if instance.is_active else 'desactivado'
+        return Response({'message': f'El usuario ha sido {estado} exitosamente.'}, status=200)
 
 class UsuarioDeleteView(generics.DestroyAPIView):
     queryset = Usuario.objects.all()
