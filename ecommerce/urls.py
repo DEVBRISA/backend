@@ -63,7 +63,7 @@ urlpatterns = [
     path('projects/delete-images/<int:id>', DeleteImageView.as_view(), name='delete_project_images'),
     path('productos/', ProductoListView.as_view(), name='producto-list'),
     path('productos/<int:id_producto>', ProductoDetailView.as_view(), name='producto-id'),
-    path('productos/create', ProductoCreateView.as_view(), name='producto-create'),
+    path('productos/create/', ProductoCreateView.as_view(), name='producto-create'),
     path('productos/edit/<int:id_producto>', ProductoUpdateView.as_view(), name='producto-edit'),
     path('productos/delete/<int:id_producto>', ProductoDeleteView.as_view(), name='producto-delete'),
     
