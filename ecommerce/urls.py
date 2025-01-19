@@ -32,6 +32,7 @@ from infoHilattis.views import  infoHilattisCreateView, infoHilattisListView, in
 from productos.views import ProductoCreateView, ProductoDeleteView, ProductoDetailView, ProductoListView, ProductoUpdateView
 from projects.views import CreateProjectView, DeleteImageView, DeleteProjectView, EditProjectView, ListProjectView, ProjectIdView
 from usuarios.api.views import LoginView, RegisterView, UsuarioChangeStateView, UsuarioDeleteView, UsuarioDetailView, UsuarioListView, UsuarioUpdateView
+from variants.views import VarianteCreateView, VarianteDeleteView, VarianteListView, VarianteUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -66,5 +67,10 @@ urlpatterns = [
     path('productos/create/', ProductoCreateView.as_view(), name='producto-create'),
     path('productos/edit/<int:id_producto>', ProductoUpdateView.as_view(), name='producto-edit'),
     path('productos/delete/<int:id_producto>', ProductoDeleteView.as_view(), name='producto-delete'),
+    path('variants/', VarianteListView.as_view(), name='variante-list'),
+    path('variants/<int:id_variante>', VarianteListView.as_view(), name='variante-id'),
+    path('variants/create', VarianteCreateView.as_view(), name='variante-create'),
+    path('variants/edit/<int:id_variante>', VarianteUpdateView.as_view(), name='variante-edit'),
+    path('variants/delete/<int:id_variante>', VarianteDeleteView.as_view(), name='variante-delete'),
     
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

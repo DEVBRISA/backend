@@ -35,7 +35,7 @@ class ProductoDetailView(generics.RetrieveAPIView):
 class ProductoCreateView(generics.CreateAPIView):
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         """Crea un nuevo producto"""
@@ -48,7 +48,7 @@ class ProductoCreateView(generics.CreateAPIView):
 class ProductoUpdateView(generics.UpdateAPIView):
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     lookup_field = 'id_producto'
 
     def put(self, request, id_producto=None):
