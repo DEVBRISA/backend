@@ -9,12 +9,12 @@ class Producto(models.Model):
         on_delete=models.CASCADE, 
         related_name='productos'
     )
-    imagen_default = models.ImageField(upload_to='productos/', null=True, blank=False)
+    imagen_default = models.ImageField(upload_to='productos/', null=True, blank=True)
     img1 = models.ImageField(upload_to='productos/', null=True, blank=True)
     img2 = models.ImageField(upload_to='productos/', null=True, blank=True)
     img3 = models.ImageField(upload_to='productos/', null=True, blank=True)
     is_variable = models.BooleanField(default=False)
-    precio = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=0.0)
+    precio = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, default=0.0)
     descripcion = models.TextField(null=True, blank=True)
     estatus = models.CharField(
         max_length=10,

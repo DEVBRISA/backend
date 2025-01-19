@@ -11,14 +11,22 @@ class ProductoSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         is_variable = data.get('is_variable', False)
-        variantes = data.get('variantes', [])
-        
-        if not is_variable:
-            if variantes:
+        variantes = self.initial_data.get('variantes', [])
+
+        # Si el producto no es variable, no puede tener variantes
+        if not is_variable and variantes:
+            raise serializers.ValidationError(
+                {"variantes": "Los productos no variables no deben tener variantes."}
+            )
+
+        # Validaciones adicionales para productos variables
+        if is_variable:
+            if any([data.get('img1'), data.get('img2'), data.get('img3'), data.get('precio')]):
                 raise serializers.ValidationError(
-                    {"variantes": "Los productos no variables no deben tener variantes."}
+                    "Los productos variables no deben tener imágenes adicionales ni precio."
                 )
-            if not data.get('imagen_default'):
+        else:
+            if 'imagen_default' in data and not data.get('imagen_default'):
                 raise serializers.ValidationError(
                     {"imagen_default": "La imagen por defecto es obligatoria para productos no variables."}
                 )
@@ -26,16 +34,25 @@ class ProductoSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     {"precio": "El precio es obligatorio para productos no variables."}
                 )
-        
-        if is_variable:
-            if not variantes:
-                raise serializers.ValidationError(
-                    {"variantes": "Es obligatorio asignar al menos una variante si el producto es variable."}
-                )
-            for campo in ['img1', 'img2', 'img3', 'precio']:
-                if data.get(campo):
-                    raise serializers.ValidationError(
-                        {campo: f"El campo {campo} no está permitido para productos variables."}
-                    )
 
         return data
+
+    def create(self, validated_data):
+        """
+        Permitir la creación de un producto variable sin variantes.
+        """
+        variantes = validated_data.pop('variantes', None)
+        producto = Producto.objects.create(**validated_data)
+        return producto
+
+    def update(self, instance, validated_data):
+        # Si imagen_default está vacía, mantener la existente
+        if 'imagen_default' in validated_data and validated_data['imagen_default'] == "":
+            validated_data.pop('imagen_default')
+
+        # Asignar valores actualizados
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
