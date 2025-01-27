@@ -68,6 +68,7 @@ class DeleteProductoImageView(generics.UpdateAPIView):
     queryset = Producto.objects.all()
     serializer_class = ProductoDeleteImageSerializer
     lookup_field = 'id_producto'
+    permission_classes = [IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
         id = kwargs.get('id')

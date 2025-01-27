@@ -35,7 +35,7 @@ class VarianteDetailView(generics.RetrieveAPIView):
 class VarianteCreateView(generics.CreateAPIView):
     queryset = Variante.objects.all()
     serializer_class = VarianteSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         """Crea una nueva variante"""
@@ -49,7 +49,7 @@ class VarianteCreateView(generics.CreateAPIView):
 class VarianteUpdateView(generics.UpdateAPIView):
     queryset = Variante.objects.all()
     serializer_class = VarianteSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     lookup_field = 'id_variante'
 
     def patch(self, request, id_variante=None):

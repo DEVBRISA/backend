@@ -3,18 +3,16 @@ from .models import Variante
 from productos.models import Producto
 
 class VarianteSerializer(serializers.ModelSerializer):
-    producto = serializers.PrimaryKeyRelatedField(queryset=Producto.objects.all(), required=False)
+    producto = serializers.PrimaryKeyRelatedField(queryset=Producto.objects.all(), required=False) 
+
     class Meta:
         model = Variante
         fields = '__all__'
 
     def validate(self, data):
         producto = data.get('producto', self.instance.producto if self.instance else None)
-        if producto and not producto.is_variable:
-            raise serializers.ValidationError(
-                {"producto": "Solo se pueden asociar variantes a productos marcados como variables."}
-            )
-
+        if not producto:
+            raise serializers.ValidationError({"producto": "El producto es obligatorio."})
         return data
 
     def validate_for_create(self, data):
