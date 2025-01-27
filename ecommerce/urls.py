@@ -29,10 +29,10 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 from categoria.views import CategoriaCreateView, CategoriaDeleteView, CategoriaEditView, CategoriaIdView, CategoriaListView
 from infoHilattis.views import  infoHilattisCreateView, infoHilattisListView, infoHilattisUpdateView
-from productos.views import ProductoCreateView, ProductoDeleteView, ProductoDetailView, ProductoListView, ProductoUpdateView
+from productos.views import DeleteProductoImageView, ProductoCreateView, ProductoDeleteView, ProductoDetailView, ProductoListView, ProductoUpdateView
 from projects.views import CreateProjectView, DeleteImageView, DeleteProjectView, EditProjectView, ListProjectView, ProjectIdView
 from usuarios.api.views import LoginView, RegisterView, UsuarioChangeStateView, UsuarioDeleteView, UsuarioDetailView, UsuarioListView, UsuarioUpdateView
-from variants.views import VarianteCreateView, VarianteDeleteView, VarianteListView, VarianteUpdateView
+from variants.views import DeleteVarianteImageView, VarianteCreateView, VarianteDeleteView, VarianteListView, VarianteUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -65,12 +65,14 @@ urlpatterns = [
     path('productos/', ProductoListView.as_view(), name='producto-list'),
     path('productos/<int:id_producto>', ProductoDetailView.as_view(), name='producto-id'),
     path('productos/create/', ProductoCreateView.as_view(), name='producto-create'),
-    path('productos/edit/<int:id_producto>', ProductoUpdateView.as_view(), name='producto-edit'),
+    path('productos/edit/<int:id_producto>', ProductoUpdateView.as_view(), name='edit_producto'),
+    path('productos/delete-images/<int:id_producto>', DeleteProductoImageView.as_view(), name='delete-producto-image'),
     path('productos/delete/<int:id_producto>', ProductoDeleteView.as_view(), name='producto-delete'),
     path('variants/', VarianteListView.as_view(), name='variante-list'),
     path('variants/<int:id_variante>', VarianteListView.as_view(), name='variante-id'),
     path('variants/create', VarianteCreateView.as_view(), name='variante-create'),
     path('variants/edit/<int:id_variante>', VarianteUpdateView.as_view(), name='variante-edit'),
+    path('variants/delete-images/<int:id_variante>', DeleteVarianteImageView.as_view(), name='delete_variants_images'),
     path('variants/delete/<int:id_variante>', VarianteDeleteView.as_view(), name='variante-delete'),
     
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

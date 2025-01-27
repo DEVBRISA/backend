@@ -55,9 +55,10 @@ INSTALLED_APPS = [
     'usuarios',
     'infoHilattis',
     'productos',
-    'variants',
     'categoria',
+    'variants',
     'projects',
+    'orders',
     ]
 
 MIDDLEWARE = [

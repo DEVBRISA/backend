@@ -3,7 +3,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from productos.models import Producto
-from productos.serializer import ProductoSerializer
+from productos.serializer import ProductoDeleteImageSerializer, ProductoSerializer
 from rest_framework.permissions import AllowAny
 
 class ProductoListView(generics.ListAPIView):
@@ -63,6 +63,28 @@ class ProductoUpdateView(generics.UpdateAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DeleteProductoImageView(generics.UpdateAPIView):
+    queryset = Producto.objects.all()
+    serializer_class = ProductoDeleteImageSerializer
+    lookup_field = 'id_producto'
+
+    def put(self, request, *args, **kwargs):
+        id = kwargs.get('id')
+        if not id:
+            return Response({"error": "ID no proporcionado"}, status=400)
+
+        try:
+            producto = Producto.objects.get(id=id)
+            data = request.data
+            serializer = self.get_serializer(producto, data=data, partial=True)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"message": "Imagen eliminada con éxito."}, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Producto.DoesNotExist:
+            return Response({"error": "Producto no encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class ProductoDeleteView(generics.DestroyAPIView):

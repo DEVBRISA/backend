@@ -2,7 +2,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from variants.models import Variante
-from variants.serializer import VarianteSerializer
+from variants.serializer import VarianteSerializer, VarianteDeleteImageSerializer
 
 class VarianteListView(generics.ListAPIView):
     queryset = Variante.objects.all()
@@ -52,18 +52,44 @@ class VarianteUpdateView(generics.UpdateAPIView):
     permission_classes = [AllowAny]
     lookup_field = 'id_variante'
 
-    def put(self, request, id_variante=None):
-        """Actualiza una variante por ID"""
+    def patch(self, request, id_variante=None):
+        """Actualiza una variante por ID parcialmente"""
         try:
             variante = self.get_queryset().get(id_variante=id_variante)
         except Variante.DoesNotExist:
             return Response({"error": "Variante no encontrada"}, status=status.HTTP_404_NOT_FOUND)
-
         serializer = self.get_serializer(variante, data=request.data, partial=True)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
+
+class DeleteVarianteImageView(generics.UpdateAPIView):
+    queryset = Variante.objects.all()
+    serializer_class = VarianteDeleteImageSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'id_variante'
+
+    def put(self, request, *args, **kwargs):
+        id_variante = kwargs.get('id_variante')
+        if not id_variante:
+            return Response({"error": "ID de variante no proporcionado"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            variante = Variante.objects.get(id_variante=id_variante)
+            data = request.data
+            serializer = self.get_serializer(variante, data=data, partial=True)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response({"message": "Imagen(es) eliminada(s) con éxito."}, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except Variante.DoesNotExist:
+            return Response({"error": "Variante no encontrada"}, status=status.HTTP_404_NOT_FOUND)
 
 
 class VarianteDeleteView(generics.DestroyAPIView):

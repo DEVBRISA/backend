@@ -25,11 +25,6 @@ class Producto(models.Model):
     fecha_modificacion = models.DateTimeField(auto_now=True)
 
     def clean(self):
-        """
-        Valida las siguientes condiciones:
-        1. Si `is_variable` es True, no se permite tener `precio` ni `descripcion`.
-        2. Si `is_variable` es False, no puede haber variantes asociadas.
-        """
         if self.is_variable:
             if self.precio or self.descripcion:
                 raise ValidationError("Los productos variables no deben tener precio ni descripción.")
@@ -37,6 +32,28 @@ class Producto(models.Model):
             from variants.models import Variante  # Import dentro del método
             if Variante.objects.filter(producto=self).exists():
                 raise ValidationError("Los productos no variables no pueden tener variantes asociadas.")
+
+
+    def delete_img1(self):
+        """Método para eliminar img1 sin borrar el producto"""
+        if self.img1:
+            self.img1.delete(save=False)
+            self.img1 = None
+            self.save()
+
+    def delete_img2(self):
+        """Método para eliminar img2 sin borrar el producto"""
+        if self.img2:
+            self.img2.delete(save=False)
+            self.img2 = None
+            self.save()
+
+    def delete_img3(self):
+        """Método para eliminar img3 sin borrar el producto"""
+        if self.img3:
+            self.img3.delete(save=False)
+            self.img3 = None
+            self.save()
 
     def __str__(self):
         return self.nombre

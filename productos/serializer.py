@@ -56,3 +56,17 @@ class ProductoSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+    
+class ProductoDeleteImageSerializer(serializers.Serializer):
+    imagen1 = serializers.BooleanField(required=False, default=False)
+    imagen2 = serializers.BooleanField(required=False, default=False)
+    imagen3 = serializers.BooleanField(required=False, default=False)
+
+    def update(self, instance, validated_data):
+        if validated_data.get('img1', False):
+            instance.delete_img1()
+        if validated_data.get('img2', False):
+            instance.delete_img2()
+        if validated_data.get('img', False):
+            instance.delete_img3()
+        return instance
