@@ -1,6 +1,8 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from productos.models import Producto
 from variants.models import Variante
 from variants.serializer import VarianteSerializer, VarianteDeleteImageSerializer
 
@@ -30,6 +32,24 @@ class VarianteDetailView(generics.RetrieveAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Variante.DoesNotExist:
             return Response({"error": "Variante no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class VarianteListByProductView(generics.ListAPIView):
+    serializer_class = VarianteSerializer
+    permission_classes = [AllowAny]
+
+    def get(self, request, id_producto=None):
+        """Obtiene todas las variantes de un producto específico"""
+        if id_producto is not None:
+            # Aquí filtras las variantes directamente por el campo 'producto'
+            variantes = Variante.objects.filter(producto=id_producto)
+            serializer = self.get_serializer(variantes, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            # Si no se pasa un id_producto, se devuelven todas las variantes
+            variantes = self.get_queryset()
+            serializer = self.get_serializer(variantes, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class VarianteCreateView(generics.CreateAPIView):
