@@ -8,24 +8,27 @@ class ProductoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
-        if not data.get('imagen_default'):
-            raise serializers.ValidationError(
-                {"imagen_default": "La imagen por defecto es obligatoria."}
-            )
-        if not data.get('precio'):
-            raise serializers.ValidationError(
-                {"precio": "El precio es obligatorio."}
-            )
-        if not data.get('descripcion'):
-            raise serializers.ValidationError(
-                {"descripcion": "La descripción es obligatoria."}
-            )
+        if self.instance is None:
+            if 'imagen_default' not in data:
+                raise serializers.ValidationError(
+                    {"imagen_default": "La imagen por defecto es obligatoria."}
+                )
+            if 'precio' not in data:
+                raise serializers.ValidationError(
+                    {"precio": "El precio es obligatorio."}
+                )
+            if 'descripcion' not in data:
+                raise serializers.ValidationError(
+                    {"descripcion": "La descripción es obligatoria."}
+                )
         return data
 
     def create(self, validated_data):
         return Producto.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
+        validated_data.setdefault('imagen_default', instance.imagen_default)
+        
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
