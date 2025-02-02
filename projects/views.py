@@ -12,7 +12,7 @@ from rest_framework.permissions import AllowAny as AllwoAny
 class CreateProjectView(generics.CreateAPIView):
     queryset = Proyecto.objects.all()
     serializer_class = ProyectoSerializer
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
