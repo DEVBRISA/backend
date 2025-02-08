@@ -20,6 +20,7 @@ class LoginView(generics.CreateAPIView):
     serializer_class = LoginSerializer
 
     def post(self, request, *args, **kwargs):
+        """devuelve un token de acceso y un token de actualización"""
         username = request.data.get("username")
         password = request.data.get("password")
         usuario = authenticate(username=username, password=password)

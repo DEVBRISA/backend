@@ -12,7 +12,7 @@ class VarianteListView(generics.ListAPIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        """Lista todas las variantes"""
+        """Lista todas las variantes existentes en el modelo variant de la base de datos, la respuesta satisfactoria espera es HTTP 200 OK"""
         variantes = self.get_queryset()
         serializer = self.get_serializer(variantes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -55,7 +55,7 @@ class VarianteListByProductView(generics.ListAPIView):
 class VarianteCreateView(generics.CreateAPIView):
     queryset = Variante.objects.all()
     serializer_class = VarianteSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def post(self, request):
         """Crea una nueva variante"""
