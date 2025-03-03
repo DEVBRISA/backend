@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from usuarios.models import Usuario
-from usuarios.api.serializer import ( # type: ignore
+from usuarios.serializer import (
     LoginSerializer, RegisterSerializer, UsuarioSerializer, UsuarioChangeStateSerializer
 )
 
