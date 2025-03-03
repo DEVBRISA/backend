@@ -49,16 +49,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'corsheaders',
-    'cloudinary',
-    'cloudinary_storage',
     'home',
-    'usuarios',
-    'infoHilattis',
-    'productos',
-    'categoria',
-    'variants',
-    'projects',
-    'orders',
+    'usuarios'
     ]
 
 MIDDLEWARE = [
@@ -98,18 +90,7 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-"""
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB'),
-        'USER': os.getenv('POSTGRES_USER'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': os.getenv('POSTGRES_HOST'),
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
-    }
-}
-"""
+
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
@@ -141,11 +122,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
@@ -160,9 +138,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-ALLOWED_HOSTS = ['*','web-production-4880.up.railway.app']
-
-CSRF_TRUSTED_ORIGINS = ['https://*','https://web-production-4880.up.railway.app']
+ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://*']
 
 
 REST_FRAMEWORK = {
@@ -205,11 +182,3 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'Authorization',
 ]
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-CLOUDINARY_STORAGE = {
-    'cloud_name': 'dsxwajkdi',
-    'api_key': '496853443348728',
-    'api_secret': 'YazHD1EAkLpdwrcRksDBYHDbJCk',
-}
-

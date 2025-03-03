@@ -26,13 +26,7 @@ from rest_framework_simplejwt.views import (
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
-
-from categoria.views import CategoriaCreateView, CategoriaDeleteView, CategoriaEditView, CategoriaIdView, CategoriaListView
-from infoHilattis.views import  infoHilattisCreateView, infoHilattisListView, infoHilattisUpdateView
-from productos.views import DeleteProductoImageView, ProductoCreateView, ProductoDeleteView, ProductoDetailView, ProductoListView, ProductoUpdateView
-from projects.views import CreateProjectView, DeleteImageView, DeleteProjectView, EditProjectView, ListProjectView, ProjectIdView
-from usuarios.api.views import LoginView, RegisterView, UsuarioChangeStateView, UsuarioDeleteView, UsuarioDetailView, UsuarioListView, UsuarioUpdateView
-from variants.views import DeleteVarianteImageView, VarianteCreateView, VarianteDeleteView, VarianteDetailView, VarianteListByProductView, VarianteListView, VarianteUpdateView
+from usuarios.views import RegisterView, LoginView, UsuarioListView, UsuarioDetailView, UsuarioUpdateView, UsuarioChangeStateView, UsuarioDeleteView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -48,32 +42,5 @@ urlpatterns = [
     path('usuarios/edit/<str:dni>', UsuarioUpdateView.as_view(), name='usuario-update'), 
     path('usuarios/change-state/<str:dni>', UsuarioChangeStateView.as_view(), name='usuario-change-state'), 
     path('usuarios/delete/<str:dni>', UsuarioDeleteView.as_view(), name='usuario-delete'), 
-    path('empresas/', infoHilattisListView.as_view(), name='empresa-list'), 
-    path('empresas/create', infoHilattisCreateView.as_view(), name='empresa-create'),     
-    path('empresas/edit/<int:id>', infoHilattisUpdateView.as_view(), name='empresa-edit'),
-    path('categorias/create', CategoriaCreateView.as_view(), name='categoria-create'),
-    path('categorias/', CategoriaListView.as_view(), name='categoria-list'),
-    path('categorias/<int:id>', CategoriaIdView.as_view(), name='categoria-id'),
-    path('categorias/edit/<int:id>', CategoriaEditView.as_view(), name='categoria-edit'),
-    path('categorias/delete/<int:id>', CategoriaDeleteView.as_view(), name='categoria-delete'),
-    path('projects/', ListProjectView.as_view(), name='list_projects'),
-    path('projects/<int:id>', ProjectIdView.as_view(), name='project-id'),
-    path('projects/create', CreateProjectView.as_view(), name='create_project'),
-    path('projects/edit/<int:id>', EditProjectView.as_view(), name='edit_project'),
-    path('projects/delete/<int:id>', DeleteProjectView.as_view(), name='delete_project'),
-    path('projects/delete-images/<int:id>', DeleteImageView.as_view(), name='delete_project_images'),
-    path('productos/', ProductoListView.as_view(), name='producto-list'),
-    path('productos/<int:id_producto>', ProductoDetailView.as_view(), name='producto-id'),
-    path('productos/create/', ProductoCreateView.as_view(), name='producto-create'),
-    path('productos/edit/<int:id_producto>', ProductoUpdateView.as_view(), name='edit_producto'),
-    path('productos/delete-images/<int:id_producto>', DeleteProductoImageView.as_view(), name='delete-producto-image'),
-    path('productos/delete/<int:id_producto>', ProductoDeleteView.as_view(), name='producto-delete'),
-    path('variants/', VarianteListView.as_view(), name='variante-list'),
-    path('variants/<int:id_variante>', VarianteDetailView.as_view(), name='variante-id'),
-    path('variants/<int:id_producto>/', VarianteListByProductView.as_view(), name='variantes-by-producto'),
-    path('variants/create', VarianteCreateView.as_view(), name='variante-create'),
-    path('variants/edit/<int:id_variante>', VarianteUpdateView.as_view(), name='variante-edit'),
-    path('variants/delete-images/<int:id_variante>', DeleteVarianteImageView.as_view(), name='delete_variants_images'),
-    path('variants/delete/<int:id_variante>', VarianteDeleteView.as_view(), name='variante-delete'),
     
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
