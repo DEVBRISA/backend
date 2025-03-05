@@ -90,11 +90,24 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.getenv('POSTGRES_DB'),
+#         'USER': os.getenv('POSTGRES_USER'),
+#         'PASSWORD': os.getenv('PGPASSWORD'),
+#         'HOST': os.getenv('PGHOST'),
+#         'PORT': os.getenv('PGPORT', '5432'),
+#     }
+# }
+
+
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
-#HOLA SÍ
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -135,8 +148,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['https://*']
+ALLOWED_HOSTS = ['*','web-production-4880.up.railway.app']
+
+CSRF_TRUSTED_ORIGINS = ['https://*','https://web-production-4880.up.railway.app']
 
 
 REST_FRAMEWORK = {
@@ -157,8 +171,8 @@ SIMPLE_JWT = {
 
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'BRISA NATURAL API',
-    'DESCRIPTION': 'APIs para Brisa Natural.',
+    'TITLE': 'Hilattis API',
+    'DESCRIPTION': 'APIs para Hilattis',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'COMPONENT_SPLIT_REQUEST': True,
