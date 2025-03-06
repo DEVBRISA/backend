@@ -23,7 +23,6 @@ class EmpresaCreateView(generics.CreateAPIView):
     queryset = Empresa.objects.all()
     serializer_class = EmpresaSerializer
     permission_classes = [IsAuthenticated]
-    # permission_classes = [AllowAny]
 
 class EmpresaUpdateView(generics.UpdateAPIView):
     """ Permite actualizar la información de una empresa. """
