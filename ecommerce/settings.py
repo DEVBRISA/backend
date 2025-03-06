@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'home',
     'usuarios',
     'empresa',
+    'categoria',
     ]
 
 MIDDLEWARE = [
@@ -91,17 +92,6 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('POSTGRES_DB'),
-#         'USER': os.getenv('POSTGRES_USER'),
-#         'PASSWORD': os.getenv('PGPASSWORD'),
-#         'HOST': os.getenv('PGHOST'),
-#         'PORT': os.getenv('PGPORT', '5432'),
-#     }
-# }
 
 
 DATABASES = {
@@ -172,9 +162,9 @@ SIMPLE_JWT = {
 
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Hilattis API',
-    'DESCRIPTION': 'APIs para Hilattis',
-    'VERSION': '1.0.0',
+    'TITLE': 'Brisa Natural API',
+    'DESCRIPTION': 'APIs para Brisa Natural EIRL',
+    'VERSION': '1.5.0',
     'SERVE_INCLUDE_SCHEMA': False,
     'COMPONENT_SPLIT_REQUEST': True,
     'SECURITY': [
