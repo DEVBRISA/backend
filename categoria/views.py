@@ -23,13 +23,6 @@ class CategoriaCreateView(generics.CreateAPIView):
     serializer_class = CategoriaSerializer
     permission_classes = [IsAuthenticated]
 
-class CategoriaRetrieveView(generics.RetrieveAPIView):
-    """ Obtiene los detalles de una categoría específica. """
-    queryset = Categoria.objects.all()
-    serializer_class = CategoriaSerializer
-    permission_classes = [IsAuthenticated]
-    lookup_field = 'id'
-
 class CategoriaUpdateView(generics.UpdateAPIView):
     """ Actualiza una categoría específica. """
     queryset = Categoria.objects.all()
