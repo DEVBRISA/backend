@@ -26,8 +26,8 @@ from rest_framework_simplejwt.views import (
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
-from categoria.views import CategoriaCreateView, CategoriaDeleteView, CategoriaDetailView, CategoriaListView, CategoriaUpdateView
-from empresa.views import EmpresaCreateView, EmpresaDeleteView, EmpresaDetailView, EmpresaListView, EmpresaUpdateView
+from categoria.views import CategoriaCreateView, CategoriaDeactivateView, CategoriaDeleteView, CategoriaDetailView, CategoriaListView, CategoriaUpdateView, ToggleCategoriaVisibilityView
+from empresa.views import EmpresaDetailView, EmpresaListView, EmpresaUpdateView
 from usuarios.views import RegisterView, LoginView, UsuarioListView, UsuarioDetailView, UsuarioUpdateView, UsuarioChangeStateView, UsuarioDeleteView
 
 urlpatterns = [
@@ -46,13 +46,12 @@ urlpatterns = [
     path('usuarios/delete/<str:dni>', UsuarioDeleteView.as_view(), name='usuario-delete'), 
     path('empresa/', EmpresaListView.as_view(), name='empresa-list'),
     path('empresa/<int:id>', EmpresaDetailView.as_view(), name='empresa-id'),
-    path('empresa/create', EmpresaCreateView.as_view(), name='empresa-create'),
     path('empresa/update/<int:id>', EmpresaUpdateView.as_view(), name='empresa-update'),
-    path('empresa/delete/<int:id>', EmpresaDeleteView.as_view(), name='empresa-delete'),
     path('categoria/', CategoriaListView.as_view(), name='categoria-list'),
-    path('categoria/<int:id>', CategoriaDetailView.as_view(), name='categoria-id'),
-    path('categoria/create', CategoriaCreateView.as_view(), name='categoria-create'),
-    path('categoria/update/<int:id>', CategoriaUpdateView.as_view(), name='categoria-update'),
-    path('categoria/delete/<int:id>', CategoriaDeleteView.as_view(), name='categoria-delete'),
-    
+    path('categoria/<int:id>/', CategoriaDetailView.as_view(), name='categoria-detail'),
+    path('categoria/create/', CategoriaCreateView.as_view(), name='categoria-create'),
+    path('categoria/update/<int:id>/', CategoriaUpdateView.as_view(), name='categoria-update'),
+    path('categoria/deactivate/<int:id>/', CategoriaDeactivateView.as_view(), name='categoria-deactivate'),
+    path('categoria/delete/<int:id>/', CategoriaDeleteView.as_view(), name='categoria-delete'),
+    path('categoria/toggle-visibility/<int:id>/', ToggleCategoriaVisibilityView.as_view(), name='categoria-toggle-visibility'),
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

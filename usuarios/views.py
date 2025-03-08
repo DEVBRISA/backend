@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,13 +9,11 @@ from usuarios.serializer import (
     LoginSerializer, RegisterSerializer, UsuarioSerializer, UsuarioChangeStateSerializer
 )
 
-
 class RegisterView(generics.CreateAPIView):
     """ Permite a los usuarios registrarse. No requiere autenticación. """
     queryset = Usuario.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = [AllowAny]
-
 
 class LoginView(APIView):
     """ Devuelve un token de acceso y un token de actualización si las credenciales son correctas. """
@@ -34,15 +32,13 @@ class LoginView(APIView):
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
             })
-        return Response({'error': 'Credenciales inválidas. Verifica tu usuario y contraseña.'}, status=401)
-
+        return Response({'error': 'Credenciales inválidas. Verifica tu usuario y contraseña.'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class UsuarioListView(generics.ListAPIView):
     """ Lista todos los usuarios. Solo accesible para usuarios autenticados. """
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
     permission_classes = [IsAuthenticated]
-
 
 class UsuarioDetailView(generics.RetrieveAPIView):
     """ Obtiene los detalles de un usuario según su DNI. """
@@ -51,20 +47,19 @@ class UsuarioDetailView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'dni'
 
-
 class UsuarioUpdateView(generics.UpdateAPIView):
-    """ Permite actualizar los datos de un usuario. """
+    """ Permite actualizar parcialmente los datos de un usuario (solo PATCH). """
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
     permission_classes = [IsAuthenticated]
     lookup_field = 'dni'
 
-    def update(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         instance = self.get_object()
         if not instance.is_active:
-            return Response({'error': 'No se puede editar un usuario inactivo.'}, status=403)
-        return super().update(request, *args, **kwargs, partial=True)
+            return Response({'error': 'No se puede editar un usuario inactivo.'}, status=status.HTTP_403_FORBIDDEN)
 
+        return super().partial_update(request, *args, **kwargs)
 
 class UsuarioChangeStateView(generics.UpdateAPIView):
     """ Activa o desactiva un usuario. """
@@ -73,26 +68,25 @@ class UsuarioChangeStateView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'dni'
 
-    def update(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.is_active = not instance.is_active 
         instance.save()
 
         estado = 'activado' if instance.is_active else 'desactivado'
-        return Response({'message': f'El usuario ha sido {estado} exitosamente.', 'is_active': instance.is_active}, status=200)
-
+        return Response({'message': f'El usuario ha sido {estado} exitosamente.', 'is_active': instance.is_active}, status=status.HTTP_200_OK)
 
 class UsuarioDeleteView(generics.DestroyAPIView):
-    """ En lugar de eliminar físicamente, desactiva el usuario. """
+    """Elimina físicamente al usuario. Solo se permite si está desactivado."""
     queryset = Usuario.objects.all()
-    serializer_class = UsuarioSerializer
     permission_classes = [IsAuthenticated]
     lookup_field = 'dni'
 
     def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if instance.is_active:
-            return Response({'error': 'No se puede eliminar un usuario activo. Primero desactívelo.'}, status=403)
-        instance.is_active = False
-        instance.save()
-        return Response({'message': 'El usuario ha sido desactivado.'}, status=200)
+        usuario = self.get_object()
+
+        if usuario.is_active:
+            return Response({'error': 'No se puede eliminar un usuario activo. Primero desactívelo.'}, status=status.HTTP_403_FORBIDDEN)
+
+        usuario.delete()
+        return Response({'message': 'El usuario ha sido eliminado permanentemente.'}, status=status.HTTP_204_NO_CONTENT)

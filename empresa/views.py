@@ -18,21 +18,8 @@ class EmpresaDetailView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     lookup_field = 'id'
 
-class EmpresaCreateView(generics.CreateAPIView):
-    """ Permite registrar una nueva empresa. """
-    queryset = Empresa.objects.all()
-    serializer_class = EmpresaSerializer
-    permission_classes = [IsAuthenticated]
-
 class EmpresaUpdateView(generics.UpdateAPIView):
     """ Permite actualizar la información de una empresa. """
-    queryset = Empresa.objects.all()
-    serializer_class = EmpresaSerializer
-    permission_classes = [IsAuthenticated]
-    lookup_field = 'id'
-
-class EmpresaDeleteView(generics.DestroyAPIView):
-    """ Permite eliminar una empresa. """
     queryset = Empresa.objects.all()
     serializer_class = EmpresaSerializer
     permission_classes = [IsAuthenticated]

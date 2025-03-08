@@ -7,6 +7,8 @@ class Categoria(models.Model):
     imagen = models.ImageField(upload_to='categorias/', null=True, blank=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_modificacion = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True)
+    visible = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = "Categoría"
