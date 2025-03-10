@@ -28,7 +28,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 from categoria.views import CategoriaCreateView, CategoriaDeactivateView, CategoriaDeleteView, CategoriaDetailView, CategoriaListView, CategoriaUpdateView, ToggleCategoriaVisibilityView
 from empresa.views import EmpresaDetailView, EmpresaListView, EmpresaUpdateView
-from productos.views import ProductoCreateView, ProductoDeactivateView, ProductoDeleteImgView, ProductoDeleteView, ProductoDetailView, ProductoListView, ProductoUpdateView, ToggleProductoVisibilityView
+from productos.views import ProductoCreateView, ProductoDeactivateView, ProductoDeleteImgView, ProductoDeleteView, ProductoDetailView, ProductoListView, ProductoUpdateView
 from usuarios.views import RegisterView, LoginView, UsuarioListView, UsuarioDetailView, UsuarioUpdateView, UsuarioChangeStateView, UsuarioDeleteView
 
 urlpatterns = [
@@ -59,8 +59,7 @@ urlpatterns = [
     path('productos/<int:id>/', ProductoDetailView.as_view(), name='producto-detail'),
     path('productos/create/', ProductoCreateView.as_view(), name='producto-create'),
     path('productos/update/<int:id>/', ProductoUpdateView.as_view(), name='producto-update'),
-    path('productos/deactivate/<int:id>/', ProductoDeactivateView.as_view(), name='producto-deactivate'),
-    path('productos/toggle-visibility/<int:id>/', ToggleProductoVisibilityView.as_view(), name='producto-toggle-visibility'),
-    path('productos/delete/<int:id>/', ProductoDeleteView.as_view(), name='producto-delete'),
-    path('productos/delete/img/<int:id>/', ProductoDeleteImgView.as_view(), name='producto-delete-img'),
+    path('productos/deactivate/<str:sku>/', ProductoDeactivateView.as_view(), name='producto-deactivate'),
+    path('productos/delete/<str:sku>/', ProductoDeleteView.as_view(), name='producto-delete'),
+    path('productos/delete/img/<str:sku>/', ProductoDeleteImgView.as_view(), name='producto-delete-img'),
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

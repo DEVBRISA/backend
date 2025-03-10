@@ -1,38 +1,49 @@
 from rest_framework import serializers
 from .models import Producto
 
+from rest_framework import serializers
+from .models import Producto
+
 class ProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Producto
-        fields = ['sku', 'nombre', 'descripcion', 'ingrediente', 'detalle', 'precio', 'cantidad', 'fecha_fabricacion', 'fecha_vencimiento',
-                  'img1', 'img2', 'img3', 'img4', 'modo_uso', 'fecha_creacion', 'fecha_modificacion', 'active', 'visible']
+        fields = [
+            'sku', 'nombre', 'descripcion', 'ingrediente', 'detalle', 'precio',
+            'img1', 'img2', 'img3', 'img4', 'modo_uso', 'fecha_creacion', 'fecha_modificacion',
+            'active', 'categoria'
+        ]
         read_only_fields = ['fecha_creacion', 'fecha_modificacion']
-    
+
     def validate_nombre(self, value):
+        """Valida que el nombre no esté duplicado."""
         if Producto.objects.filter(nombre__iexact=value).exists():
             raise serializers.ValidationError("Ya existe un producto con este nombre.")
         return value
-    
+
     def validate_precio(self, value):
+        """Valida que el precio sea mayor a 0."""
         if value <= 0:
             raise serializers.ValidationError("El precio debe ser un valor positivo.")
         return value
-    
-    def validate(self, data):
-        if not data.get('img1'):
-            raise serializers.ValidationError({"img1": "Se requiere al menos una imagen."})
-        return data
-    
-    def update(self, instance, validated_data):
-        imagen = validated_data.get('imagen', instance.imagen)
-        instance.imagen = imagen 
-        return super().update(instance, validated_data)
-    
-class ToggleProductoVisibilitySerializer(serializers.Serializer):
-    visible = serializers.BooleanField()
 
-class ProductoDeleteSerializer(serializers.Serializer):
-    active = serializers.BooleanField()
+    def validate(self, data):
+        """Valida que al menos una imagen sea proporcionada."""
+        if not any([data.get('img1'), data.get('img2'), data.get('img3'), data.get('img4')]):
+            raise serializers.ValidationError({"error": "Se requiere al menos una imagen del producto."})
+        return data
+
+
+class ProductoDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Producto
+        fields = ['active']
+
+    def update(self, instance, validated_data):
+        """Método que actualiza el campo `active` del producto."""
+        instance.active = validated_data.get('active', instance.active)
+        instance.save()
+        return instance
+
 
 class ProductoDeleteImageSerializer(serializers.Serializer):
     img1 = serializers.BooleanField(required=False, default=False)
@@ -41,13 +52,19 @@ class ProductoDeleteImageSerializer(serializers.Serializer):
     img4 = serializers.BooleanField(required=False, default=False)
 
     def update(self, instance, validated_data):
-        if validated_data.get('img1', False):
-            instance.delete_img1()
-        if validated_data.get('img2', False):
-            instance.delete_img2()
-        if validated_data.get('img3', False):
-            instance.delete_img3()
-        if validated_data.get('img4', False):
-                instance.delete_img4()
+        if validated_data.get('img1'):
+            instance.img1.delete(save=False)
+            instance.img1 = None
+        if validated_data.get('img2'):
+            instance.img2.delete(save=False)
+            instance.img2 = None
+        if validated_data.get('img3'):
+            instance.img3.delete(save=False)
+            instance.img3 = None
+        if validated_data.get('img4'):
+            instance.img4.delete(save=False)
+            instance.img4 = None
+
+        instance.save()
         return instance
 
