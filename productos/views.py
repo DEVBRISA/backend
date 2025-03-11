@@ -32,28 +32,28 @@ class ProductoCreateView(generics.CreateAPIView):
     """Crea un nuevo producto."""
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class ProductoUpdateView(generics.UpdateAPIView):
     """Actualiza un producto existente."""
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     lookup_field = 'sku'
 
 class ProductoDeactivateView(generics.UpdateAPIView):
     """Activa o desactiva un producto."""
     queryset = Producto.objects.all()
     serializer_class = ProductoDeleteSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     lookup_field = 'sku'
 
 
 class ProductoDeleteView(generics.DestroyAPIView):
     """Elimina un producto si está inactivo."""
     queryset = Producto.objects.all()
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     lookup_field = 'sku'
 
     def destroy(self, request, *args, **kwargs):
@@ -69,7 +69,7 @@ class ProductoDeleteImgView(generics.UpdateAPIView):
     queryset = Producto.objects.all()
     serializer_class = ProductoDeleteImageSerializer
     lookup_field = 'sku'
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def patch(self, request, *args, **kwargs):
         producto = self.get_object()

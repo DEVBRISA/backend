@@ -28,6 +28,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 from categoria.views import CategoriaCreateView, CategoriaDeactivateView, CategoriaDeleteView, CategoriaDetailView, CategoriaListView, CategoriaUpdateView, ToggleCategoriaVisibilityView
 from empresa.views import EmpresaDetailView, EmpresaListView, EmpresaUpdateView
+from lote.views import LoteCantidadUpdateView, LoteCreateView, LoteDeleteView, LoteListView, LoteUpdateView
 from productos.views import ProductoCreateView, ProductoDeactivateView, ProductoDeleteImgView, ProductoDeleteView, ProductoDetailView, ProductoListView, ProductoUpdateView
 from usuarios.views import RegisterView, LoginView, UsuarioListView, UsuarioDetailView, UsuarioUpdateView, UsuarioChangeStateView, UsuarioDeleteView
 
@@ -62,4 +63,9 @@ urlpatterns = [
     path('productos/deactivate/<str:sku>/', ProductoDeactivateView.as_view(), name='producto-deactivate'),
     path('productos/delete/<str:sku>/', ProductoDeleteView.as_view(), name='producto-delete'),
     path('productos/delete/img/<str:sku>/', ProductoDeleteImgView.as_view(), name='producto-delete-img'),
+    path('lote/', LoteListView.as_view(), name='lote-list'),
+    path('lote/create/', LoteCreateView.as_view(), name='lote-create'),
+    path('lote/update/<int:id>/', LoteUpdateView.as_view(), name='lote-update'),
+    path('lote/delete/<int:id>/', LoteDeleteView.as_view(), name='lote-delete'),
+    path('lote/update/cantidad/<int:id>/', LoteCantidadUpdateView.as_view(), name='lote-update-cantidad'),
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
