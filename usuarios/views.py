@@ -21,18 +21,22 @@ class LoginView(APIView):
     serializer_class = LoginSerializer
 
     def post(self, request):
-        username = request.data.get("username")
-        password = request.data.get("password")
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        username = serializer.validated_data["username"]
+        password = serializer.validated_data["password"]
         usuario = authenticate(username=username, password=password)
 
         if usuario:
             refresh = RefreshToken.for_user(usuario)
             return Response({
-                'dni': usuario.id,  # Solo devuelve el ID del usuario
+                'dni': usuario.dni,
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
             })
         return Response({'error': 'Credenciales inválidas. Verifica tu usuario y contraseña.'}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 class UsuarioListView(generics.ListAPIView):
     """ Lista todos los usuarios. Solo accesible para usuarios autenticados. """
@@ -46,6 +50,7 @@ class UsuarioDetailView(generics.RetrieveAPIView):
     serializer_class = UsuarioSerializer
     permission_classes = [IsAuthenticated]
     lookup_field = 'dni'
+
 
 class UsuarioUpdateView(generics.UpdateAPIView):
     """ Permite actualizar parcialmente los datos de un usuario (solo PATCH). """
