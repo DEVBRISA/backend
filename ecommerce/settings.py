@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'categoria',
     'productos',
     'lote',
+    'pack',
     ]
 
 MIDDLEWARE = [
@@ -182,6 +183,7 @@ SPECTACULAR_SETTINGS = {
 
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'Authorization',

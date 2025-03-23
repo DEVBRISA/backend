@@ -9,6 +9,7 @@ class Producto(models.Model):
     detalle = models.TextField(blank=True, null=True)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name='productos')
+    pack = models.BooleanField(default=False)
 
     img1 = models.ImageField(upload_to='productos/', null=False, blank=False)
     img2 = models.ImageField(upload_to='productos/', null=True, blank=True)

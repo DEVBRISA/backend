@@ -3,7 +3,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from .models import Producto
 from .serializer import (
-    ProductoSerializer, ProductoDeleteSerializer, ProductoDeleteImageSerializer
+    ProductoPackSerializer, ProductoSerializer, ProductoDeleteSerializer, ProductoDeleteImageSerializer
 )
 
 class ProductoListView(generics.ListAPIView):
@@ -32,14 +32,14 @@ class ProductoCreateView(generics.CreateAPIView):
     """Crea un nuevo producto."""
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
 
 class ProductoUpdateView(generics.UpdateAPIView):
     """Actualiza un producto existente."""
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     lookup_field = 'sku'
 
 class ProductoDeactivateView(generics.UpdateAPIView):
@@ -65,7 +65,7 @@ class ProductoDeleteView(generics.DestroyAPIView):
 
 
 class ProductoDeleteImgView(generics.UpdateAPIView):
-    """Elimina imágenes de un producto sin borrar el producto en sí."""
+    """Elimina imágenes de un producto sin borrar el producto en sí.El true elimina la imagen. El false la mantiene"""
     queryset = Producto.objects.all()
     serializer_class = ProductoDeleteImageSerializer
     lookup_field = 'sku'
@@ -80,3 +80,23 @@ class ProductoDeleteImgView(generics.UpdateAPIView):
             return Response({"message": "Imagen eliminada correctamente."}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class ProductoTogglePackView(generics.UpdateAPIView):
+    """Activa un producto para que sea parte del apartado 'PACK RUTINA'"""
+    queryset = Producto.objects.all()
+    serializer_class = ProductoPackSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'sku'
+
+    def patch(self, request, *args, **kwargs):
+        producto = self.get_object()
+        pack_estado = request.data.get('pack')
+        
+        if pack_estado is not None:
+            producto.pack = pack_estado
+            producto.save()
+            return Response({"message": "Estado de pack actualizado correctamente."}, status=200)
+        
+        return Response({"error": "Debe proporcionar el campo 'pack'."}, status=400)
+

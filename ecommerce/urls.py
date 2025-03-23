@@ -29,7 +29,8 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 from categoria.views import CategoriaCreateView, CategoriaDeactivateView, CategoriaDeleteView, CategoriaDetailView, CategoriaListView, CategoriaUpdateView, ToggleCategoriaVisibilityView
 from empresa.views import EmpresaDetailView, EmpresaListView, EmpresaUpdateView
 from lote.views import LoteCantidadUpdateView, LoteCreateView, LoteDeleteView, LoteListView, LoteUpdateView
-from productos.views import ProductoCreateView, ProductoDeactivateView, ProductoDeleteImgView, ProductoDeleteView, ProductoDetailView, ProductoListView, ProductoUpdateView
+from pack.views import PackCreateView, PackDeactivateView, PackDeleteImgView, PackDeleteView, PackDetailView, PackListView, PackUpdateView
+from productos.views import ProductoCreateView, ProductoDeactivateView, ProductoDeleteImgView, ProductoDeleteView, ProductoDetailView, ProductoListView, ProductoTogglePackView, ProductoUpdateView
 from usuarios.views import RegisterView, LoginView, UsuarioListView, UsuarioDetailView, UsuarioUpdateView, UsuarioChangeStateView, UsuarioDeleteView
 
 urlpatterns = [
@@ -63,9 +64,18 @@ urlpatterns = [
     path('productos/deactivate/<str:sku>/', ProductoDeactivateView.as_view(), name='producto-deactivate'),
     path('productos/delete/<str:sku>/', ProductoDeleteView.as_view(), name='producto-delete'),
     path('productos/delete/img/<str:sku>/', ProductoDeleteImgView.as_view(), name='producto-delete-img'),
+    path('productos/activePack/<str:sku>/', ProductoTogglePackView.as_view(), name='producto-pack'),
     path('lote/', LoteListView.as_view(), name='lote-list'),
     path('lote/create/', LoteCreateView.as_view(), name='lote-create'),
     path('lote/update/<int:id>/', LoteUpdateView.as_view(), name='lote-update'),
     path('lote/delete/<int:id>/', LoteDeleteView.as_view(), name='lote-delete'),
     path('lote/update/cantidad/<int:id>/', LoteCantidadUpdateView.as_view(), name='lote-update-cantidad'),
+    path('packs/create/', PackCreateView.as_view(), name='pack-create'),
+    path('packs/', PackListView.as_view(), name='pack-list'),
+    path('packs/<str:sku>/', PackDetailView.as_view(), name='pack-detail'),
+    path('packs/update/<str:sku>/', PackUpdateView.as_view(), name='pack-update'),
+    path('packs/deactivate/<str:sku>/', PackDeactivateView.as_view(), name='pack-deactivate'),
+    path('packs/delete/<str:sku>/', PackDeleteView.as_view(), name='pack-delete'),
+    path('packs/delete-img/<str:sku>/', PackDeleteImgView.as_view(), name='pack-delete-img'),
+    
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

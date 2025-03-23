@@ -1,16 +1,13 @@
 from rest_framework import serializers
 from .models import Producto
 
-from rest_framework import serializers
-from .models import Producto
-
 class ProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Producto
         fields = [
             'sku', 'nombre', 'descripcion', 'ingrediente', 'detalle', 'precio',
             'img1', 'img2', 'img3', 'img4', 'modo_uso', 'fecha_creacion', 'fecha_modificacion',
-            'active', 'categoria'
+            'active', 'categoria', 'pack'
         ]
         read_only_fields = ['fecha_creacion', 'fecha_modificacion']
 
@@ -67,4 +64,9 @@ class ProductoDeleteImageSerializer(serializers.Serializer):
 
         instance.save()
         return instance
+    
+class ProductoPackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Producto
+        fields = ['pack']
 
