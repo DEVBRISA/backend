@@ -21,26 +21,29 @@ class ProductoListView(generics.ListAPIView):
         return queryset
 
 class ProductoDetailView(generics.RetrieveAPIView):
-    """Obtiene el detalle de un producto activo según su SKU."""
-    queryset = Producto.objects.filter(active=True)
+    queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [AllowAny]
     lookup_field = 'sku'
+
+    def get_queryset(self):
+        return Producto.objects.all()
 
 
 class ProductoCreateView(generics.CreateAPIView):
-    """Crea un nuevo producto."""
+    """Crea un nuevo producto con SKU autogenerado."""
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
-
+    def perform_create(self, serializer):
+        serializer.save()  
+    
 class ProductoUpdateView(generics.UpdateAPIView):
-    """Actualiza un producto existente."""
+    """Actualiza un producto existente sin cambiar el SKU."""
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [AllowAny]
-    lookup_field = 'sku'
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'sku' 
 
 class ProductoDeactivateView(generics.UpdateAPIView):
     """Activa o desactiva un producto."""
