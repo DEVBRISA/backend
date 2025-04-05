@@ -24,8 +24,9 @@ class ProductoSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        """Valida que al menos una imagen sea proporcionada."""
-        if not any([data.get('img1'), data.get('img2'), data.get('img3'), data.get('img4')]):
+        request = self.context.get('request')
+        if request and request.method == 'POST':
+         if not any([data.get('img1'), data.get('img2'), data.get('img3'), data.get('img4')]):
             raise serializers.ValidationError({"error": "Se requiere al menos una imagen del producto."})
         return data
 
