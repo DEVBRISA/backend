@@ -33,7 +33,7 @@ class ProductoCreateView(generics.CreateAPIView):
     """Crea un nuevo producto con SKU autogenerado."""
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save()  
