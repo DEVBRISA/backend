@@ -27,7 +27,7 @@ from rest_framework_simplejwt.views import (
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from categoria.views import CategoriaCreateView, CategoriaDeactivateView, CategoriaDeleteView, CategoriaDetailView, CategoriaListView, CategoriaUpdateView, ToggleCategoriaVisibilityView
-from empresa.views import EmpresaDetailView, EmpresaListView, EmpresaUpdateView
+from empresa.views import EmpresaCreateView, EmpresaDetailView, EmpresaListView, EmpresaUpdateView
 from lote.views import LoteCantidadUpdateView, LoteCreateView, LoteDeleteView, LoteListView, LoteUpdateView
 from pack.views import PackCreateView, PackDeactivateView, PackDeleteImgView, PackDeleteView, PackDetailView, PackListView, PackUpdateView
 from productos.views import ProductoCreateView, ProductoDeactivateView, ProductoDeleteImgView, ProductoDeleteView, ProductoDetailView, ProductoListView, ProductoTogglePackView, ProductoUpdateView
@@ -49,6 +49,7 @@ urlpatterns = [
     path('usuarios/delete/<str:dni>', UsuarioDeleteView.as_view(), name='usuario-delete'), 
     path('empresa/', EmpresaListView.as_view(), name='empresa-list'),
     path('empresa/<int:id>', EmpresaDetailView.as_view(), name='empresa-id'),
+    path ('empresa/create/', EmpresaCreateView.as_view(), name='empresa-create'),
     path('empresa/update/<int:id>', EmpresaUpdateView.as_view(), name='empresa-update'),
     path('categoria/', CategoriaListView.as_view(), name='categoria-list'),
     path('categoria/<int:id>/', CategoriaDetailView.as_view(), name='categoria-detail'),

@@ -11,6 +11,12 @@ class EmpresaListView(generics.ListAPIView):
     serializer_class = EmpresaSerializer
     permission_classes = [AllowAny]
 
+class EmpresaCreateView(generics.CreateAPIView):
+    """ Permite crear una nueva empresa. """
+    queryset = Empresa.objects.all()
+    serializer_class = EmpresaSerializer
+    permission_classes = [IsAuthenticated]
+
 class EmpresaDetailView(generics.RetrieveAPIView):
     """ Obtiene los detalles de una empresa según su ID. """
     queryset = Empresa.objects.all()

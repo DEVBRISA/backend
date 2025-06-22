@@ -23,7 +23,7 @@ class CategoriaCreateView(generics.CreateAPIView):
     """Crea una nueva categoría (requiere autenticación)."""
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
         nombre = request.data.get('nombre', '').strip()
