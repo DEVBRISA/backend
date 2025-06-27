@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'lote',
     'pack',
     'contact',
+    'complaints_book',
+    'offer'
     ]
 
 MIDDLEWARE = [

@@ -27,9 +27,11 @@ from rest_framework_simplejwt.views import (
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from categoria.views import CategoriaCreateView, CategoriaDeactivateView, CategoriaDeleteView, CategoriaDetailView, CategoriaListView, CategoriaUpdateView, ToggleCategoriaVisibilityView
+from complaints_book.views import ReclamoCreateView, ReclamoListView
 from contact.views import ContactoCreateView, ContactoListView
 from empresa.views import EmpresaCreateView, EmpresaDetailView, EmpresaListView, EmpresaUpdateView
 from lote.views import LoteCantidadUpdateView, LoteCreateView, LoteDeleteView, LoteListView, LoteUpdateView
+from offer.views import PromocionCreateView, PromocionDeleteView, PromocionDetailView, PromocionListView, PromocionUpdateView
 from pack.views import PackCreateView, PackDeactivateView, PackDeleteImgView, PackDeleteView, PackDetailView, PackListView, PackUpdateView
 from productos.views import ProductoCreateView, ProductoDeactivateView, ProductoDeleteImgView, ProductoDeleteView, ProductoDetailView, ProductoListView, ProductoTogglePackView, ProductoUpdateView
 from usuarios.views import RegisterView, LoginView, UsuarioListView, UsuarioDetailView, UsuarioUpdateView, UsuarioChangeStateView, UsuarioDeleteView
@@ -54,6 +56,8 @@ urlpatterns = [
     path('empresa/update/<int:id>', EmpresaUpdateView.as_view(), name='empresa-update'),
     path('contact/', ContactoListView.as_view(), name='contacto-list'),
     path('contact/create/', ContactoCreateView.as_view(), name='contacto-create'),
+    path('complaints_book/', ReclamoListView.as_view(), name='complaints_book-list'),
+    path('complaints_book/create/', ReclamoCreateView.as_view(), name='complaints_book-create'),
     path('categoria/', CategoriaListView.as_view(), name='categoria-list'),
     path('categoria/<int:id>/', CategoriaDetailView.as_view(), name='categoria-detail'),
     path('categoria/create/', CategoriaCreateView.as_view(), name='categoria-create'),
@@ -69,6 +73,11 @@ urlpatterns = [
     path('productos/delete/<str:sku>/', ProductoDeleteView.as_view(), name='producto-delete'),
     path('productos/delete/img/<str:sku>/', ProductoDeleteImgView.as_view(), name='producto-delete-img'),
     path('productos/activePack/<str:sku>/', ProductoTogglePackView.as_view(), name='producto-pack'),
+    path('offer/', PromocionListView.as_view(), name='Promocion-list'),
+    path('offer/<int:pk>/', PromocionDetailView.as_view(), name='Promocion-detail'),
+    path('offer/create/', PromocionCreateView.as_view(), name='Promocion-create'),
+    path('offer/update/<int:pk>/', PromocionUpdateView.as_view(), name='Promocion-update'),
+    path('offer/delete/<int:pk>/', PromocionDeleteView.as_view(), name='Promocion-delete'),
     path('lote/', LoteListView.as_view(), name='lote-list'),
     path('lote/create/', LoteCreateView.as_view(), name='lote-create'),
     path('lote/update/<int:id>/', LoteUpdateView.as_view(), name='lote-update'),
