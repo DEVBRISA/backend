@@ -91,4 +91,4 @@ urlpatterns = [
     path('packs/delete/<str:sku>/', PackDeleteView.as_view(), name='pack-delete'),
     path('packs/delete-img/<str:sku>/', PackDeleteImgView.as_view(), name='pack-delete-img'),
     
-    ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ]

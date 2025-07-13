@@ -51,20 +51,17 @@ class ProductoDeleteImageSerializer(serializers.Serializer):
 
     def update(self, instance, validated_data):
         if validated_data.get('img1'):
-            instance.img1.delete(save=False)
-            instance.img1 = None
+            instance.img1 = ""
         if validated_data.get('img2'):
-            instance.img2.delete(save=False)
-            instance.img2 = None
+            instance.img2 = ""
         if validated_data.get('img3'):
-            instance.img3.delete(save=False)
-            instance.img3 = None
+            instance.img3 = ""
         if validated_data.get('img4'):
-            instance.img4.delete(save=False)
-            instance.img4 = None
+            instance.img4 = ""
 
         instance.save()
         return instance
+    
     
 class ProductoPackSerializer(serializers.ModelSerializer):
     class Meta:

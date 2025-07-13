@@ -4,7 +4,7 @@ class Categoria(models.Model):
     id = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100, unique=True)
     descripcion = models.TextField(blank=True, null=True)
-    imagen = models.ImageField(upload_to='categorias/', null=True, blank=True)
+    imagen = models.CharField(max_length=500, blank=True, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_modificacion = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)

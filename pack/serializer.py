@@ -10,12 +10,12 @@ class PackSerializer(serializers.ModelSerializer):
         write_only=True,
         source='productos'
     )
-    productos = ProductoSerializer(many=True, read_only=True)  # Mostrar productos en la respuesta
+    productos = ProductoSerializer(many=True, read_only=True)
 
-    img1 = serializers.ImageField(required=False, allow_null=True)
-    img2 = serializers.ImageField(required=False, allow_null=True)
-    img3 = serializers.ImageField(required=False, allow_null=True)
-    img4 = serializers.ImageField(required=False, allow_null=True)
+    img1 = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    img2 = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    img3 = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    img4 = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
     class Meta:
         model = Pack
@@ -33,26 +33,21 @@ class PackSerializer(serializers.ModelSerializer):
         return value
 
 class PackDeleteImageSerializer(serializers.Serializer):
-    """Serializer para eliminar imágenes de un pack usando booleanos."""
     img1 = serializers.BooleanField(required=False, default=False)
     img2 = serializers.BooleanField(required=False, default=False)
     img3 = serializers.BooleanField(required=False, default=False)
     img4 = serializers.BooleanField(required=False, default=False)
 
     def update(self, instance, validated_data):
-        """Elimina las imágenes solo si el booleano es `True`."""
+        """Elimina las imágenes (pone cadena vacía) si el booleano es `True`."""
         if validated_data.get('img1'):
-            instance.img1.delete(save=False)
-            instance.img1 = None
+            instance.img1 = ""
         if validated_data.get('img2'):
-            instance.img2.delete(save=False)
-            instance.img2 = None
+            instance.img2 = ""
         if validated_data.get('img3'):
-            instance.img3.delete(save=False)
-            instance.img3 = None
+            instance.img3 = ""
         if validated_data.get('img4'):
-            instance.img4.delete(save=False)
-            instance.img4 = None
+            instance.img4 = ""
 
         instance.save()
         return instance

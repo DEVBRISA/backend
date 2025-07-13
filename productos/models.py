@@ -11,10 +11,10 @@ class Producto(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name='productos')
     pack = models.BooleanField(default=False)
 
-    img1 = models.ImageField(upload_to='productos/', null=False, blank=False, default='productos/default.jpg')
-    img2 = models.ImageField(upload_to='productos/', null=True, blank=True)
-    img3 = models.ImageField(upload_to='productos/', null=True, blank=True)
-    img4 = models.ImageField(upload_to='productos/', null=True, blank=True)
+    img1 = models.CharField(max_length=500, blank=True, null=True)
+    img2 = models.CharField(max_length=500, blank=True, null=True)
+    img3 = models.CharField(max_length=500, blank=True, null=True)
+    img4 = models.CharField(max_length=500, blank=True, null=True)
 
     modo_uso = models.TextField(blank=True, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
@@ -22,19 +22,17 @@ class Producto(models.Model):
     active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
-        if not self.sku:  # Solo generar si no tiene SKU
+        if not self.sku: 
             last_product = Producto.objects.order_by('-id').first()
             next_id = (last_product.id + 1) if last_product else 1
             self.sku = f'BRISA-{next_id}'
         super().save(*args, **kwargs)
 
     def eliminar_imagen(self, imagen):
-        """Elimina la imagen del producto y la establece en `null`."""
-        img_attr = getattr(self, imagen)
-        if img_attr:
-            img_attr.delete(save=False)
+        """Elimina la URL de la imagen del producto y la establece en `null`."""
+        if hasattr(self, imagen):
             setattr(self, imagen, None)
-            self.save()
+        self.save()
 
     def __str__(self):
         return self.nombre 
