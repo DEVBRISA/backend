@@ -9,9 +9,9 @@ class PromocionListView(generics.ListAPIView):
     Lista todas las promociones registradas.
     Puedes filtrar por:
     - `activa`: `true` o `false` para mostrar solo promociones activas o inactivas.
-    - `producto_id`: ID de un producto específico para filtrar promociones que aplican a ese producto.
-    - `categoria_id`: ID de una categoría específica para filtrar promociones aplicables a esa categoría."""
-
+    - `producto_sku`: SKU de un producto para filtrar promociones que aplican a ese producto.
+    - `categoria_id`: ID de una categoría para filtrar promociones aplicables a esa categoría.
+    """
     serializer_class = PromocionSerializer
     permission_classes = [AllowAny]
 
@@ -22,12 +22,12 @@ class PromocionListView(generics.ListAPIView):
         if activa is not None:
             queryset = queryset.filter(activa=activa.lower() == 'true')
 
-        producto_id = self.request.query_params.get('producto_id')
-        if producto_id is not None:
-            queryset = queryset.filter(producto_id=producto_id)
+        producto_sku = self.request.query_params.get('producto_sku')
+        if producto_sku:
+            queryset = queryset.filter(producto__sku=producto_sku)
 
         categoria_id = self.request.query_params.get('categoria_id')
-        if categoria_id is not None:
+        if categoria_id:
             queryset = queryset.filter(categoria_id=categoria_id)
 
         return queryset

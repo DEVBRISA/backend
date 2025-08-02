@@ -2,6 +2,12 @@ from rest_framework import serializers
 from .models import Producto
 
 class ProductoSerializer(serializers.ModelSerializer):
+    img1 = serializers.ImageField(write_only=True, required=False)
+    img2 = serializers.ImageField(write_only=True, required=False)
+    img3 = serializers.ImageField(write_only=True, required=False)
+    img4 = serializers.ImageField(write_only=True, required=False)
+    sku = serializers.CharField(read_only=True)
+
     class Meta:
         model = Producto
         fields = [
@@ -11,11 +17,25 @@ class ProductoSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['fecha_creacion', 'fecha_modificacion']
 
+    def to_representation(self, instance):
+        """Mostrar URLs reales en la respuesta"""
+        rep = super().to_representation(instance)
+        rep['img1'] = instance.img1
+        rep['img2'] = instance.img2
+        rep['img3'] = instance.img3
+        rep['img4'] = instance.img4
+        return rep
+
     def validate_nombre(self, value):
-        """Valida que el nombre no esté duplicado."""
-        if Producto.objects.filter(nombre__iexact=value).exists():
+        request = self.context.get('request')
+        qs = Producto.objects.filter(nombre__iexact=value)
+        if request and request.method in ['PUT', 'PATCH']:
+            instance = self.instance
+            qs = qs.exclude(pk=instance.pk)
+        if qs.exists():
             raise serializers.ValidationError("Ya existe un producto con este nombre.")
         return value
+
 
     def validate_precio(self, value):
         """Valida que el precio sea mayor a 0."""
@@ -26,9 +46,16 @@ class ProductoSerializer(serializers.ModelSerializer):
     def validate(self, data):
         request = self.context.get('request')
         if request and request.method == 'POST':
-         if not any([data.get('img1'), data.get('img2'), data.get('img3'), data.get('img4')]):
+            has_images = any([
+                request.FILES.get('img1'),
+                request.FILES.get('img2'),
+                request.FILES.get('img3'),
+                request.FILES.get('img4')
+            ])
+        if not has_images:
             raise serializers.ValidationError({"error": "Se requiere al menos una imagen del producto."})
         return data
+
 
 
 class ProductoDeleteSerializer(serializers.ModelSerializer):

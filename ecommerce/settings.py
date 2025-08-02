@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
+import cloudinary
 import dj_database_url
 from dotenv import load_dotenv
 import os
@@ -100,6 +101,14 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
+
+
+cloudinary.config( 
+  cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+  api_key=os.getenv("CLOUDINARY_API_KEY"),
+  api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+  secure=True
+)
 
 
 

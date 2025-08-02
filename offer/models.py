@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from categoria.models import Categoria
 from productos.models import Producto
 
@@ -30,3 +31,7 @@ class Promocion(models.Model):
 
     def aplica_a_producto(self):
         return self.producto is not None
+    
+    def clean(self):
+        if self.fecha_fin <= self.fecha_inicio:
+            raise ValidationError({'fecha_fin': 'La fecha de fin debe ser posterior a la fecha de inicio.'})

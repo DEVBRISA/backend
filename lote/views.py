@@ -9,16 +9,16 @@ class LoteListView(generics.ListAPIView):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        producto_id = self.kwargs.get('producto_id', None)
-        if producto_id:
-            return Lote.objects.filter(producto_id=producto_id)
+        producto_sku = self.kwargs.get('producto_sku', None)
+        if producto_sku:
+            return Lote.objects.filter(producto__sku=producto_sku)
         return Lote.objects.all()
 
 
 class LoteCreateView(generics.CreateAPIView):
     queryset = Lote.objects.all()
     serializer_class = LoteSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
 class LoteUpdateView(generics.UpdateAPIView):
     queryset = Lote.objects.all()

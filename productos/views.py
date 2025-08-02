@@ -1,3 +1,4 @@
+import cloudinary.uploader
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -30,20 +31,39 @@ class ProductoDetailView(generics.RetrieveAPIView):
 
 
 class ProductoCreateView(generics.CreateAPIView):
-    """Crea un nuevo producto con SKU autogenerado."""
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save()  
-    
+        img_urls = {}
+
+        for img_field in ['img1', 'img2', 'img3', 'img4']:
+            file = self.request.FILES.get(img_field)
+            if file:
+                result = cloudinary.uploader.upload(file)
+                img_urls[img_field] = result.get('secure_url')
+
+        serializer.save(**img_urls)
+
+
 class ProductoUpdateView(generics.UpdateAPIView):
-    """Actualiza un producto existente sin cambiar el SKU."""
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
     permission_classes = [IsAuthenticated]
-    lookup_field = 'sku' 
+    lookup_field = 'sku'
+
+    def perform_update(self, serializer):
+        img_urls = {}
+
+        for img_field in ['img1', 'img2', 'img3', 'img4']:
+            file = self.request.FILES.get(img_field)
+            if file:
+                result = cloudinary.uploader.upload(file)
+                img_urls[img_field] = result.get('secure_url')
+
+        serializer.save(**img_urls)
+        
 
 class ProductoDeactivateView(generics.UpdateAPIView):
     """Activa o desactiva un producto."""
