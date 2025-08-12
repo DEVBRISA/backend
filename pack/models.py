@@ -3,7 +3,7 @@ from categoria.models import Categoria
 from productos.models import Producto
 
 class Pack(models.Model):
-    sku = models.CharField(max_length=50, unique=True)
+    sku = models.CharField(max_length=50, unique=True, blank=True)  # <-- blank=True
     nombre = models.CharField(max_length=255, unique=True)
     descripcion = models.TextField()
     productos = models.ManyToManyField(Producto, related_name='packs') 
@@ -18,12 +18,12 @@ class Pack(models.Model):
     fecha_modificacion = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
 
-    def eliminar_imagen(self, imagen):
-        """Elimina la imagen del pack (vacía el string del campo)."""
-        if hasattr(self, imagen):
-            setattr(self, imagen, "")
-        self.save()
-
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        if is_new and not self.sku:
+            self.sku = f"PACK-{self.id}"
+            super().save(update_fields=['sku'])
 
     def __str__(self):
         return self.nombre

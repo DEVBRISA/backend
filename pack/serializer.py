@@ -4,6 +4,7 @@ from .models import Pack
 from productos.serializer import ProductoSerializer
 
 class PackSerializer(serializers.ModelSerializer):
+    sku = serializers.CharField(read_only=True)
     productos_ids = serializers.PrimaryKeyRelatedField(
         queryset=Producto.objects.all(),
         many=True,
@@ -24,10 +25,9 @@ class PackSerializer(serializers.ModelSerializer):
             'precio', 'active', 'img1', 'img2', 'img3', 'img4', 
             'fecha_creacion', 'fecha_modificacion'
         ]
-        read_only_fields = ['fecha_creacion', 'fecha_modificacion']
+        read_only_fields = ['sku', 'fecha_creacion', 'fecha_modificacion']
 
     def validate_productos_ids(self, value):
-        """Valida que el pack tenga exactamente 3 productos."""
         if len(value) != 3:
             raise serializers.ValidationError("Cada pack debe contener exactamente 3 productos.")
         return value
