@@ -33,7 +33,7 @@ class ProductoDetailView(generics.RetrieveAPIView):
 class ProductoCreateView(generics.CreateAPIView):
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         img_urls = {}
