@@ -34,7 +34,6 @@ class CategoriaCreateView(generics.CreateAPIView):
             img_url = result.get('secure_url')
         serializer.save(imagen=img_url)
 
-
 class CategoriaUpdateView(generics.UpdateAPIView):
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
