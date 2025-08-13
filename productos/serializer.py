@@ -29,13 +29,11 @@ class ProductoSerializer(serializers.ModelSerializer):
     def validate_nombre(self, value):
         request = self.context.get('request')
         qs = Producto.objects.filter(nombre__iexact=value)
-        if request and request.method in ['PUT', 'PATCH']:
-            instance = self.instance
-            qs = qs.exclude(pk=instance.pk)
+        if request and request.method in ['PUT', 'PATCH'] and self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
         if qs.exists():
             raise serializers.ValidationError("Ya existe un producto con este nombre.")
         return value
-
 
     def validate_precio(self, value):
         """Valida que el precio sea mayor a 0."""
@@ -43,8 +41,10 @@ class ProductoSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("El precio debe ser un valor positivo.")
         return value
 
+
     def validate(self, data):
         request = self.context.get('request')
+
         if request and request.method == 'POST':
             has_images = any([
                 request.FILES.get('img1'),
@@ -52,10 +52,24 @@ class ProductoSerializer(serializers.ModelSerializer):
                 request.FILES.get('img3'),
                 request.FILES.get('img4')
             ])
-        if not has_images:
-            raise serializers.ValidationError({"error": "Se requiere al menos una imagen del producto."})
-        return data
+            if not has_images:
+                raise serializers.ValidationError({"error": "Se requiere al menos una imagen del producto."})
 
+        if request and request.method in ['PUT', 'PATCH']:
+            instance = self.instance
+            has_existing_images = any([
+                instance.img1, instance.img2, instance.img3, instance.img4
+            ])
+            has_new_images = any([
+                request.FILES.get('img1'),
+                request.FILES.get('img2'),
+                request.FILES.get('img3'),
+                request.FILES.get('img4')
+            ])
+            if not has_existing_images and not has_new_images:
+                raise serializers.ValidationError({"error": "Debe tener al menos una imagen."})
+
+        return data
 
 
 class ProductoDeleteSerializer(serializers.ModelSerializer):

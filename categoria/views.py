@@ -1,3 +1,4 @@
+import cloudinary
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -19,34 +20,38 @@ class CategoriaDetailView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     lookup_field = 'id'
 
+
 class CategoriaCreateView(generics.CreateAPIView):
-    """Crea una nueva categoría (requiere autenticación)."""
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
     permission_classes = [AllowAny]
 
-    def create(self, request, *args, **kwargs):
-        nombre = request.data.get('nombre', '').strip()
-        if Categoria.objects.filter(nombre__iexact=nombre).exists():
-            return Response({"error": "Ya existe una categoría con este nombre."}, status=status.HTTP_400_BAD_REQUEST)
-        return super().create(request, *args, **kwargs)
+    def perform_create(self, serializer):
+        img_url = None
+        file = self.request.FILES.get('imagen_file')
+        if file:
+            result = cloudinary.uploader.upload(file)
+            img_url = result.get('secure_url')
+        serializer.save(imagen=img_url)
+
 
 class CategoriaUpdateView(generics.UpdateAPIView):
-    """Modifica parcialmente los datos de una categoría (requiere autenticación)."""
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     lookup_field = 'id'
 
-    def patch(self, request, *args, **kwargs):
-        categoria = self.get_object()
-        serializer = self.get_serializer(categoria, data=request.data, partial=True)
+    def perform_update(self, serializer):
+        img_url = None
+        file = self.request.FILES.get('imagen_file')
+        if file:
+            result = cloudinary.uploader.upload(file)
+            img_url = result.get('secure_url')
 
-        if serializer.is_valid():
+        if img_url:
+            serializer.save(imagen=img_url)
+        else:
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ToggleCategoriaVisibilityView(generics.UpdateAPIView):
     """Activa o desactiva la visibilidad de una categoría (requiere autenticación)."""

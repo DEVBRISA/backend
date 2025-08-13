@@ -50,7 +50,7 @@ class ProductoCreateView(generics.CreateAPIView):
 class ProductoUpdateView(generics.UpdateAPIView):
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     lookup_field = 'sku'
 
     def perform_update(self, serializer):

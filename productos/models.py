@@ -3,7 +3,7 @@ from categoria.models import Categoria
 
 class Producto(models.Model):
     sku = models.CharField(max_length=50, unique=True, blank=True)
-    nombre = models.CharField(max_length=255, unique=True)
+    nombre = models.CharField(max_length=255)
     descripcion = models.TextField()
     ingrediente = models.TextField(blank=True, null=True)
     detalle = models.TextField(blank=True, null=True)
