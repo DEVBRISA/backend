@@ -3,7 +3,7 @@ from categoria.models import Categoria
 from productos.models import Producto
 
 class Pack(models.Model):
-    sku = models.CharField(max_length=50, unique=True, blank=True)  # <-- blank=True
+    sku = models.CharField(max_length=50, unique=True, blank=True) 
     nombre = models.CharField(max_length=255, unique=True)
     descripcion = models.TextField()
     productos = models.ManyToManyField(Producto, related_name='packs') 

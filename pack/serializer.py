@@ -7,7 +7,9 @@ from productos.serializer import ProductoSerializer
 
 class PackSerializer(serializers.ModelSerializer):
     sku = serializers.CharField(read_only=True)
-    productos_ids = serializers.PrimaryKeyRelatedField(
+
+    productos_skus = serializers.SlugRelatedField(
+        slug_field='sku',
         queryset=Producto.objects.all(),
         many=True,
         write_only=True,
@@ -23,20 +25,25 @@ class PackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pack
         fields = [
-            'sku', 'nombre', 'descripcion', 'productos_ids', 'productos',
+            'sku', 'nombre', 'descripcion', 'productos_skus', 'productos',
             'precio', 'active',
             'img1_file', 'img2_file', 'img3_file', 'img4_file',
             'fecha_creacion', 'fecha_modificacion'
         ]
         read_only_fields = ['sku', 'fecha_creacion', 'fecha_modificacion']
 
-    def validate_productos_ids(self, value):
-        if len(value) != 3:
-            raise serializers.ValidationError("Cada pack debe contener exactamente 3 productos.")
+    def validate_productos_skus(self, value):
+        if not (2 <= len(value) <= 5):
+            raise serializers.ValidationError("Cada pack debe contener entre 2 y 5 productos.")
         return value
 
+    def validate(self, data):
+        if self.instance is None: 
+            if not (data.get('img1_file') or data.get('img2_file') or data.get('img3_file') or data.get('img4_file')):
+                raise serializers.ValidationError("Debes subir al menos una imagen para registrar el pack.")
+        return data
+
     def upload_to_cloudinary(self, file):
-        """Sube un archivo a Cloudinary y devuelve la URL segura."""
         result = cloudinary.uploader.upload(file)
         return result.get('secure_url')
 
@@ -79,7 +86,6 @@ class PackSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
-
 
 class PackDeleteImageSerializer(serializers.Serializer):
     img1 = serializers.BooleanField(required=False, default=False)
