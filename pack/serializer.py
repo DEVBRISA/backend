@@ -22,12 +22,18 @@ class PackSerializer(serializers.ModelSerializer):
     img3_file = serializers.ImageField(write_only=True, required=False)
     img4_file = serializers.ImageField(write_only=True, required=False)
 
+    img1 = serializers.CharField(read_only=True)
+    img2 = serializers.CharField(read_only=True)
+    img3 = serializers.CharField(read_only=True)
+    img4 = serializers.CharField(read_only=True)
+
     class Meta:
         model = Pack
         fields = [
             'sku', 'nombre', 'descripcion', 'productos_skus', 'productos',
             'precio', 'active',
             'img1_file', 'img2_file', 'img3_file', 'img4_file',
+            'img1', 'img2', 'img3', 'img4',
             'fecha_creacion', 'fecha_modificacion'
         ]
         read_only_fields = ['sku', 'fecha_creacion', 'fecha_modificacion']
