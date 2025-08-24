@@ -27,6 +27,7 @@ from rest_framework_simplejwt.views import (
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from categoria.views import CategoriaCreateView, CategoriaDeactivateView, CategoriaDeleteView, CategoriaDetailView, CategoriaListView, CategoriaUpdateView, ToggleCategoriaVisibilityView
+from clientes.views import RegistroClienteView, SolicitarOTPView, VerificarOTPView
 from complaints_book.views import ReclamoCreateView, ReclamoListView
 from contact.views import ContactoCreateView, ContactoListView
 from empresa.views import EmpresaCreateView, EmpresaDetailView, EmpresaListView, EmpresaUpdateView
@@ -90,5 +91,8 @@ urlpatterns = [
     path('packs/deactivate/<str:sku>/', PackDeactivateView.as_view(), name='pack-deactivate'),
     path('packs/delete/<str:sku>/', PackDeleteView.as_view(), name='pack-delete'),
     path('packs/delete-img/<str:sku>/', PackDeleteImgView.as_view(), name='pack-delete-img'),
+    path("solicitar-otp/", SolicitarOTPView.as_view(), name="solicitar-otp"),
+    path("verificar-otp/", VerificarOTPView.as_view(), name="verificar-otp"),
+    path("registro/", RegistroClienteView.as_view(), name="registro"),
     
     ]

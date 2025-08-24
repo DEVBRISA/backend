@@ -59,7 +59,8 @@ INSTALLED_APPS = [
     'pack',
     'contact',
     'complaints_book',
-    'offer'
+    'offer',
+    'clientes'
     ]
 
 MIDDLEWARE = [
@@ -78,7 +79,7 @@ ROOT_URLCONF = 'ecommerce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -101,6 +102,14 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 DATABASES = {
     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")  # usa Gmail
+EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")  # tu correo
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")  # tu app password
+
 
 
 cloudinary.config( 

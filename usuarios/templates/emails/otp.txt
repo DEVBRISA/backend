@@ -1,0 +1,11 @@
+Hola,
+
+Tu código de verificación es: {{ code }}
+
+Este código es válido por 10 minutos y puede usarse para:
+- Completar tu registro en Brisa Natural.
+- Recuperar el acceso a tu cuenta.
+
+Si no solicitaste este código, ignora este correo.
+
+El equipo de Brisa Natural
