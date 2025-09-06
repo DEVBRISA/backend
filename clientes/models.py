@@ -37,15 +37,15 @@ class Cliente(AbstractBaseUser):
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
 
-    tipo_documento = models.CharField( max_length=3, choices=TIPO_DOCUMENTO_CHOICES, default="DNI")
-
-    numero_documento = models.CharField(max_length=12, unique=True, default="000000000000")
+    tipo_documento = models.CharField(max_length=3, choices=TIPO_DOCUMENTO_CHOICES, default="DNI")
+    numero_documento = models.CharField(max_length=12, unique=True)
 
     telefono = models.CharField(max_length=15, null=True, blank=True)
     password = models.CharField(max_length=128)
 
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    email_verified = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["nombre", "apellido", "tipo_documento", "numero_documento"]
@@ -61,15 +61,21 @@ class Cliente(AbstractBaseUser):
 
 
 class OTP(models.Model):
+    cliente = models.ForeignKey("Cliente", on_delete=models.CASCADE, null=True, blank=True)
     email = models.EmailField()
     code = models.CharField(max_length=6)
+
     created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField(blank=True, null=True)
     is_used = models.BooleanField(default=False)
 
+    def save(self, *args, **kwargs):
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timezone.timedelta(minutes=5)
+        super().save(*args, **kwargs)
+
     def is_expired(self):
-        return timezone.now() > self.created_at + timezone.timedelta(minutes=5)
+        return timezone.now() > self.expires_at
 
     def __str__(self):
         return f"OTP {self.code} para {self.email}"
-
-
