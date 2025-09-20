@@ -27,9 +27,10 @@ from rest_framework_simplejwt.views import (
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from categoria.views import CategoriaCreateView, CategoriaDeactivateView, CategoriaDeleteView, CategoriaDetailView, CategoriaListView, CategoriaUpdateView, ToggleCategoriaVisibilityView
-from clientes.views import ClienteDeleteView, ClienteDetailByDocumentoView, ClienteListView, ClienteLoginView, RegistroClienteView, SolicitarOTPView, VerificarOTPView
+from clientes.views import ClienteDeleteView, ClienteDetailByDocumentoView, ClienteListView, ClienteLoginView, RegistroClienteView 
 from complaints_book.views import ReclamoCreateView, ReclamoListView
 from contact.views import ContactoCreateView, ContactoListView
+from cupones.views import CuponCreateView, CuponDeactivateView, CuponDetailView, CuponListView, CuponUpdateView, ValidarCuponView
 from empresa.views import EmpresaCreateView, EmpresaDetailView, EmpresaListView, EmpresaUpdateView
 from lote.views import LoteCantidadUpdateView, LoteCreateView, LoteDeleteView, LoteListView, LoteUpdateView
 from offer.views import PromocionCreateView, PromocionDeleteView, PromocionDetailView, PromocionListView, PromocionUpdateView
@@ -91,11 +92,17 @@ urlpatterns = [
     path('packs/deactivate/<str:sku>/', PackDeactivateView.as_view(), name='pack-deactivate'),
     path('packs/delete/<str:sku>/', PackDeleteView.as_view(), name='pack-delete'),
     path('packs/delete-img/<str:sku>/', PackDeleteImgView.as_view(), name='pack-delete-img'),
-    path("clientes/solicitar-otp/", SolicitarOTPView.as_view(), name="solicitar-otp"),
-    path("clientes/verificar-otp/", VerificarOTPView.as_view(), name="verificar-otp"),
     path("clientes/registro/", RegistroClienteView.as_view(), name="registro"),
     path("clientes/", ClienteListView.as_view(), name="cliente-list"),
     path("clientes/<str:numero_documento>/", ClienteDetailByDocumentoView.as_view(), name="cliente-detail"),
     path("clientes/<str:numero_documento>/delete/", ClienteDeleteView.as_view(), name="cliente-delete"),
     path("auth/clientes/login/", ClienteLoginView.as_view(), name="cliente-login"),
+
+
+    path("cupones/", CuponListView.as_view(), name="cupon-list"),
+    path("cupones/create/", CuponCreateView.as_view(), name="cupon-create"),
+    path("cupones/<int:pk>/", CuponDetailView.as_view(), name="cupon-detail"),
+    path("cupones/<int:pk>/update/", CuponUpdateView.as_view(), name="cupon-update"),
+    path("cupones/<int:pk>/deactivate/", CuponDeactivateView.as_view(), name="cupon-deactivate"),
+    path("cupones/validar/", ValidarCuponView.as_view(), name="cupon-validar"),
     ]

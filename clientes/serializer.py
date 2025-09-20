@@ -1,3 +1,4 @@
+from datetime import date
 from rest_framework import serializers
 from django.core.validators import RegexValidator
 from .models import Cliente
@@ -13,6 +14,7 @@ class RegistroClienteSerializer(serializers.ModelSerializer):
         required=False,
         validators=[RegexValidator(r'^\+?\d{7,15}$', "Debe ser un número de teléfono válido")]
     )
+    fecha_nacimiento = serializers.DateField(required=True)
 
     class Meta:
         model = Cliente
@@ -23,6 +25,7 @@ class RegistroClienteSerializer(serializers.ModelSerializer):
             "tipo_documento",
             "numero_documento",
             "telefono",
+            "fecha_nacimiento",
             "password",
         ]
 
@@ -32,6 +35,13 @@ class RegistroClienteSerializer(serializers.ModelSerializer):
         cliente.set_password(password)
         cliente.save()
         return cliente
+
+    def validate_fecha_nacimiento(self, value):
+        hoy = date.today()
+        edad = hoy.year - value.year - ((hoy.month, hoy.day) < (value.month, value.day))
+        if edad < 18:
+            raise serializers.ValidationError("Debes ser mayor de 18 años para registrarte.")
+        return value
 
     def validate_tipo_documento(self, value):
         allowed = [choice[0] for choice in Cliente.TIPO_DOCUMENTO_CHOICES]
@@ -57,13 +67,6 @@ class RegistroClienteSerializer(serializers.ModelSerializer):
 
         return data
 
-class SolicitarOTPSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
-
-
-class VerificarOTPSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
-    code = serializers.CharField(min_length=6, max_length=6, required=True)
 
 class ClienteReadSerializer(serializers.ModelSerializer):
     class Meta:
