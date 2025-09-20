@@ -79,8 +79,7 @@ class ClienteReadSerializer(serializers.ModelSerializer):
             "tipo_documento",
             "numero_documento",
             "telefono",
-            "is_active",
-            "email_verified",
+            "is_active"
         ]
 
 class ClienteLoginSerializer(serializers.Serializer):
