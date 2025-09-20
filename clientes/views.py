@@ -64,29 +64,32 @@ class ClienteDeleteView(APIView):
 
 # === LOGIN ===
 class ClienteLoginView(APIView):
-    serializer_class = ClienteLoginSerializer
-
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        email = request.data.get("email")
+        password = request.data.get("password")
 
-        user = serializer.validated_data["user"]
+        try:
+            cliente = Cliente.objects.get(email=email)
+        except Cliente.DoesNotExist:
+            return Response({"error": "Credenciales inválidas"}, status=status.HTTP_401_UNAUTHORIZED)
 
-        refresh = RefreshToken.for_user(user)
-        refresh["cliente_id"] = user.id
-        refresh["email"] = user.email
-        refresh["nombre"] = user.nombre
-        refresh["apellido"] = user.apellido
+        if not cliente.check_password(password):
+            return Response({"error": "Credenciales inválidas"}, status=status.HTTP_401_UNAUTHORIZED)
 
-        return Response(
-            {
-                "refresh": str(refresh),
-                "access": str(refresh.access_token),
-                "cliente": {
-                    "email": user.email,
-                    "nombre": user.nombre,
-                    "apellido": user.apellido,
-                },
-            },
-            status=status.HTTP_200_OK,
-        )
+        # 🚀 Crear un token vacío y llenarlo con info de Cliente
+        refresh = RefreshToken()
+        refresh["cliente_id"] = cliente.id
+        refresh["email"] = cliente.email
+        refresh["nombre"] = cliente.nombre
+        refresh["apellido"] = cliente.apellido
+
+        return Response({
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+            "cliente": {
+                "id": cliente.id,
+                "email": cliente.email,
+                "nombre": cliente.nombre,
+                "apellido": cliente.apellido,
+            }
+        }, status=status.HTTP_200_OK)
